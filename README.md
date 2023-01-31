@@ -25,7 +25,7 @@ pip install cookieninja jinja2-ansible-filters
 You can generate a project from a template by running e.g.:
 
 ```bash
-cookieninja gh:zenml-io/zenml-project-templates:starter
+cookieninja gh:zenml-io/zenml-project-templates --directory=starter
 ```
 
 ## 📜 List of Project Templates
