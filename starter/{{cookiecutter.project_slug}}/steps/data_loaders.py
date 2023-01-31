@@ -5,7 +5,7 @@ from typing import List
 import pandas as pd
 
 from sklearn.datasets import (
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y'  %}
     load_wine,
     load_breast_cancer,
     load_iris,
@@ -28,7 +28,7 @@ from zenml.logger import get_logger
 
 logger = get_logger(__name__)
 
-{% if cookiecutter.use_step_params == 'y' %}
+{% if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y' %}
 class SklearnDataset(StrEnum):
     """Built-in scikit-learn datasets."""
     wine = "wine"
@@ -110,8 +110,41 @@ def data_loader(
     ### YOUR CODE ENDS HERE ###
 
     return dataset
+{% else %}
+@step
+def data_loader() -> Output(
+    dataset=pd.DataFrame,
+):
+    """Data loader step.
+    
+    This is an example of a data loader step that is usually the first step
+    in your pipeline. It reads data from an external source like a file,
+    database or 3rd party library, then formats it and returns it as a step
+    output artifact.
 
+    Data loader steps should have caching disabled if they are not deterministic
+    (i.e. if they data they load from the external source is different when
+    they are subsequently called, even if the step code doesn't change).
+    
+    As an alternative, try modelling the data source as a step parameter to make
+    your data loader deterministic and configurable without the need to change
+    the step implementation. See the documentation for more information:
 
+        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+
+    Returns:
+        The loaded dataset artifact.
+    """
+    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+    # Load the {{ cookiecutter.sklearn_dataset_name }} dataset and format it as a pandas DataFrame
+    dataset = load_{{ cookiecutter.sklearn_dataset_name | lower | replace(' ', '_') }}(as_frame=True).frame
+    dataset.info()
+    logger.info(dataset.head())
+    ### YOUR CODE ENDS HERE ###
+
+    return dataset
+{% endif %}
+{% if cookiecutter.use_step_params == 'y' %}
 class DataProcessorStepParameters(BaseParameters):
     """Parameters for the data processor step.
 
@@ -277,40 +310,6 @@ def data_splitter(
 
     return train_set, test_set
 {% else %}
-@step
-def data_loader() -> Output(
-    dataset=pd.DataFrame,
-):
-    """Data loader step.
-    
-    This is an example of a data loader step that is usually the first step
-    in your pipeline. It reads data from an external source like a file,
-    database or 3rd party library, then formats it and returns it as a step
-    output artifact.
-
-    Data loader steps should have caching disabled if they are not deterministic
-    (i.e. if they data they load from the external source is different when
-    they are subsequently called, even if the step code doesn't change).
-    
-    As an alternative, try modelling the data source as a step parameter to make
-    your data loader deterministic and configurable without the need to change
-    the step implementation. See the documentation for more information:
-
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
-
-    Returns:
-        The loaded dataset artifact.
-    """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Load the {{ cookiecutter.sklearn_dataset_name }} dataset and format it as a pandas DataFrame
-    dataset = load_{{ cookiecutter.sklearn_dataset_name | lower | replace(' ', '_') }}(as_frame=True).frame
-    dataset.info()
-    logger.info(dataset.head())
-    ### YOUR CODE ENDS HERE ###
-
-    return dataset
-
-
 @step
 def data_processor(dataset: pd.DataFrame) -> pd.DataFrame:
     """Data processor step.

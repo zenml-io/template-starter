@@ -5,19 +5,23 @@ from steps.data_loaders import (
     data_processor, 
     data_splitter,
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
     DataLoaderStepParameters,
+    SklearnDataset,
+{%- endif %}
     DataProcessorStepParameters,
     DataSplitterStepParameters,
-    SklearnDataset,
 {%- endif %}
 )
 from steps.model_trainers import (
     model_trainer,
     model_evaluator,
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_model == 'y' %}
+    SklearnClassifierModel,
+{%- endif %}
     ModelTrainerStepParameters,
     ModelEvaluatorStepParameters,
-    SklearnClassifierModel,
 {%- endif %}
 )
 
@@ -28,12 +32,16 @@ __all__ = [
     "model_trainer",
     "model_evaluator",
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
     "DataLoaderStepParameters",
+    "SklearnDataset",
+{%- endif %}
     "DataProcessorStepParameters",
     "DataSplitterStepParameters",
-    "SklearnDataset",
+{%- if cookiecutter.configurable_model == 'y' %}
+    "SklearnClassifierModel",
+{%- endif %}
     "ModelTrainerStepParameters",
     "ModelEvaluatorStepParameters",
-    "SklearnClassifierModel",
 {%- endif %}
 ]

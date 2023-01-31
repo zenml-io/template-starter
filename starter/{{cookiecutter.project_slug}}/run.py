@@ -9,13 +9,17 @@ from steps import (
     model_trainer,
     model_evaluator,
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
+    SklearnDataset,
     DataLoaderStepParameters,
+{%- endif %}
     DataProcessorStepParameters,
     DataSplitterStepParameters,
-    SklearnDataset,
     ModelTrainerStepParameters,
     ModelEvaluatorStepParameters,
+{%- if cookiecutter.configurable_model == 'y' %}
     SklearnClassifierModel,
+{%- endif %}
 {%- endif %}
 )
 from pipelines import (
@@ -67,10 +71,63 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
             params[key] = False
             continue
     return params
+
+
+{% endif %}
+@click.command(help="""
+{{ cookiecutter.project_name }} CLI.
+
+Run the {{ cookiecutter.project_name }} model training pipeline with various
+options.
+
+Examples:
+
+  \b
+  # Run the pipeline with default options
+  python run.py
+
+  \b
+  # Run the pipeline with caching disabled
+  python run.py --no-cache
+
+{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y' %}
+
+  \b
+  # Run the pipeline with a different dataset
+  python run.py --dataset=diabetes
 {%- endif %}
 
+{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_model == 'y' %}
 
-@click.command()
+  \b
+  # Run the pipeline with a different model
+  python run.py --model=svm
+{%- endif %}
+
+{%- if cookiecutter.use_step_params == 'y' %}
+
+  \b
+  # Run the pipeline with custom hyperparameters for the model training step
+  python run.py --hyperparameters="C=0.1,max_iter=1000"
+
+  \b
+  # Run the pipeline with custom data splitter step parameters
+  python run.py --test-size=0.1 --no-stratify
+
+  \b
+  # Run the pipeline with custom data processor step parameters
+  python run.py --drop-columns="alcohol,ash" --no-normalize
+
+  \b
+  # Run the pipeline with a different random seed
+  python run.py --random-state=40
+
+  \b
+  # Change the model evaluation thresholds
+  python run.py --min-train-accuracy=0.98 --min-test-accuracy=0.98 --max-train-test-diff=0.05 --fail-on-eval-warnings
+{%- endif %}
+"""
+)
 @click.option(
     "--no-cache",
     is_flag=True,
@@ -78,18 +135,22 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
     help="Disable caching for the pipeline run.",
 )
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
 @click.option(
     "--dataset",
     default="wine",
     type=click.Choice(SklearnDataset.values()),
     help="The scikit-learn dataset to load.",
 )
+{%- endif %}
+{%- if cookiecutter.configurable_model == 'y' %}
 @click.option(
     "--model",
     default="logistic_regression",
     type=click.Choice(SklearnClassifierModel.values()),
     help="The scikit-learn model to train.",
 )
+{%- endif %}
 @click.option(
     "--no-drop-na",
     is_flag=True,
@@ -135,7 +196,7 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
     "pipeline runs.",
 )
 @click.option(
-    "--hyper-parameters",
+    "--hyperparameters",
     default=None,
     type=click.STRING,
     help="Comma-separated list of hyper-parameters to pass to the model "
@@ -171,8 +232,12 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
 def main(
     no_cache: bool = False,
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
     dataset: str = SklearnDataset.wine.value,
+{%- endif %}
+{%- if cookiecutter.configurable_model == 'y' %}
     model: str = SklearnClassifierModel.logistic_regression.value,
+{%- endif %}
     no_drop_na: bool = False,
     drop_columns: Optional[str] = None,
     no_normalize: bool = False,
@@ -180,7 +245,7 @@ def main(
     no_shuffle: bool = False,
     no_stratify: bool = False,
     random_state: int = 42,
-    hyper_parameters: Optional[str] = None,
+    hyperparameters: Optional[str] = None,
     min_train_accuracy: float = 0.8,
     min_test_accuracy: float = 0.8,
     max_train_test_diff: float = 0.1,
@@ -193,17 +258,9 @@ def main(
       
       * instantiating the steps and configuring them with the required
         parameters (some of which may come from command line arguments)
-
       * creating a pipeline instance that brings together all step instances
-
       * launching the pipeline
-
-      * looking at the results of the pipeline run
-
-    Example usage:
-
-        python run.py
-
+      * extracting and looking at the artifacts logged by the pipeline run
     """
 
     # Initialize a pipeline. This is also where we instantiate the steps and
@@ -212,11 +269,15 @@ def main(
     # instance that is ready to be run.
     pipeline = model_training_pipeline(
 {%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_dataset == 'y' %}
         data_loader=data_loader(
             params=DataLoaderStepParameters(
                 dataset=SklearnDataset(dataset),
             ),
         ),
+{%- else %}
+        data_loader=data_loader(),
+{%- endif %}
         data_processor=data_processor(
             params=DataProcessorStepParameters(
                 drop_na=not no_drop_na,
@@ -234,9 +295,11 @@ def main(
         ),
         model_trainer=model_trainer(
             params=ModelTrainerStepParameters(
+{%- if cookiecutter.configurable_model == 'y' %}
                 model=SklearnClassifierModel(model),
+{%- endif %}
                 random_state=random_state,
-                hyperparameters=process_hyper_parameters(hyper_parameters),
+                hyperparameters=process_hyper_parameters(hyperparameters),
             ),
         ),
         model_evaluator=model_evaluator(

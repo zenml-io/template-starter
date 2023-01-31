@@ -6,7 +6,7 @@ from typing import Any, Dict
 import pandas as pd
 
 from sklearn.base import ClassifierMixin
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_model == 'y' %}
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
@@ -50,6 +50,7 @@ from zenml.steps import (
 logger = get_logger(__name__)
 
 {% if cookiecutter.use_step_params == 'y' %}
+{%- if cookiecutter.configurable_model == 'y' %}
 class SklearnClassifierModel(StrEnum):
     """Scikit-learn models used for classification."""
     logistic_regression = "logistic_regression"
@@ -61,6 +62,7 @@ class SklearnClassifierModel(StrEnum):
     perceptron = "perceptron"
     sgd_classifier = "sgd_classifier"
     decision_tree = "decision_tree"
+{%- endif %}
 
 class ModelTrainerStepParameters(BaseParameters):
     """Parameters for the model trainer step.
@@ -72,8 +74,10 @@ class ModelTrainerStepParameters(BaseParameters):
     """
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+{%- if cookiecutter.configurable_model == 'y' %}
     # The name of the scikit-learn classifier model to train.
     model: SklearnClassifierModel = SklearnClassifierModel.{{ cookiecutter.sklearn_model_name | lower | replace(' ', '_') }}
+{%- endif %}
     # The random seed to use for reproducibility.
     random_state: int = 42
     # The parameters to pass to the model constructor.
@@ -115,10 +119,16 @@ def model_trainer(
     
     This step is parameterized using the `ModelTrainerStepParameters` class,
     which allows you to configure the step independently of the step code,
+{%- if cookiecutter.configurable_model == 'y' %}
     before running it in a pipeline. In this example, the step can be configured
     to use a different model, change the random seed, or pass different
     hyperparameters to the model constructor. See the documentation for more
     information:
+{%- else %}
+    before running it in a pipeline. In this example, the step can be configured
+    to change the random seed, or pass different hyperparameters to the model
+    constructor. See the documentation for more information:
+{%- endif %}
 
         https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching
 
@@ -133,8 +143,9 @@ def model_trainer(
     Y_train = train_set["target"]
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Initialize the model indicated in the step parameters and train it on the
-    # training set.
+    # Initialize the model with the hyperparameters indicated in the step
+    # parameters and train it on the training set.
+{%- if cookiecutter.configurable_model == 'y' %}
     if params.model == SklearnClassifierModel.logistic_regression:
         model = LogisticRegression(
             random_state=params.random_state,
@@ -174,6 +185,25 @@ def model_trainer(
             random_state=params.random_state,
             **params.hyperparameters,
         )
+{%- elif cookiecutter.sklearn_model_name == 'Logistic Regression' %}
+    model = LogisticRegression(random_state=42)
+{%- elif cookiecutter.sklearn_model_name == 'SVC' %}
+    model = SVC(random_state=42)
+{%- elif cookiecutter.sklearn_model_name == 'Linear SVC' %}
+    model = LinearSVC(random_state=42)
+{%- elif cookiecutter.sklearn_model_name == 'Random Forest' %}
+    model = RandomForestClassifier(n_estimators=100)
+{%- elif cookiecutter.sklearn_model_name == 'KNN' -%}
+    model = KNeighborsClassifier(n_neighbors = 3)
+{%- elif cookiecutter.sklearn_model_name == 'Gaussian NB' %}
+    model = GaussianNB()
+{%- elif cookiecutter.sklearn_model_name == 'Perceptron' %}
+    model = Perceptron(random_state=42)
+{%- elif cookiecutter.sklearn_model_name == 'SGD Classifier' %}
+    model = SGDClassifier(random_state=42)
+{%- elif cookiecutter.sklearn_model_name == 'Decision Tree' %}
+    model = DecisionTreeClassifier(random_state=42)
+{%- endif %}    
 
     logger.info(f"Training model {model}...")
     model.fit(X_train, Y_train)

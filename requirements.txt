@@ -1,2 +1,5 @@
 cookieninja
 jinja2-ansible-filters
+black
+ruff
+autoflake

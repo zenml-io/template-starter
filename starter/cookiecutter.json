@@ -3,14 +3,16 @@
     "email": "info@zenml.io",
     "project_name": "ZenML Starter",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-    "project_short_description": "ZenML Starter contains all the basics you need to start building ML pipelines with ZenML.",
     "version": "0.1.0",
     "open_source_license": ["Apache Software License 2.0", "MIT license", "BSD license", "ISC license", "GNU General Public License v3", "Not open source"],
 
-    "use_step_params": "y",
+    "use_step_params": "n",
     "use_custom_artifacts": "n",
     "sklearn_dataset_name": ["Wine", "Iris", "Breast Cancer"],
+    "configurable_dataset": "n",
     "sklearn_model_name": ["Logistic Regression", "SVC", "Linear SVC", "Random Forest", "KNN", "Gaussian NB", "Perceptron", "SGD Classifier", "Decision Tree"],
+    "configurable_model": "n",
 
+    "auto_format": "n",
     "_extensions": ["jinja2_ansible_filters.AnsibleCoreFiltersExtension"]
 }
