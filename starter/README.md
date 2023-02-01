@@ -74,7 +74,7 @@ auto-formatting option when prompted by the template generator..
 You can generate a project from this templates by running:
 
 ```bash
-copier gh:zenml-io/zenml-project-templates
+copier gh:zenml-io/zenml-project-templates .
 ```
 
 You will be prompted to enter various values for the template variables. Once

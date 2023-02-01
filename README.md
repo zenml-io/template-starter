@@ -26,7 +26,7 @@ pip install copier jinja2-time
 You can generate a project from one of the existing templates by running e.g.:
 
 ```bash
-copier gh:zenml-io/zenml-project-templates
+copier gh:zenml-io/zenml-project-templates .
 ```
 
 You will be prompted to select the project template and enter various values for
