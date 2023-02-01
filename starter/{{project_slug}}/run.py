@@ -8,8 +8,8 @@ from steps import (
     data_splitter,
     model_trainer,
     model_evaluator,
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_dataset %}
     SklearnDataset,
     DataLoaderStepParameters,
 {%- endif %}
@@ -17,7 +17,7 @@ from steps import (
     DataSplitterStepParameters,
     ModelTrainerStepParameters,
     ModelEvaluatorStepParameters,
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
     SklearnClassifierModel,
 {%- endif %}
 {%- endif %}
@@ -26,7 +26,7 @@ from pipelines import (
     model_training_pipeline,
 )
 
-{% if use_step_params == 'y' %}
+{% if use_step_params %}
 def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
     """Process hyper parameters entered by the user from the command line.
     
@@ -90,21 +90,21 @@ Examples:
   # Run the pipeline with caching disabled
   python run.py --no-cache
 
-{%- if use_step_params == 'y' and configurable_dataset == 'y' %}
+{%- if use_step_params and configurable_dataset %}
 
   \b
   # Run the pipeline with a different dataset
-  python run.py --dataset=diabetes
+  python run.py --dataset=breast_cancer
 {%- endif %}
 
-{%- if use_step_params == 'y' and configurable_model == 'y' %}
+{%- if use_step_params and configurable_model %}
 
   \b
   # Run the pipeline with a different model
-  python run.py --model=svm
+  python run.py --model=SVM
 {%- endif %}
 
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
 
   \b
   # Run the pipeline with custom hyperparameters for the model training step
@@ -134,19 +134,19 @@ Examples:
     default=False,
     help="Disable caching for the pipeline run.",
 )
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_dataset %}
 @click.option(
     "--dataset",
-    default="wine",
+    default="{{ sklearn_dataset_name }}",
     type=click.Choice(SklearnDataset.values()),
     help="The scikit-learn dataset to load.",
 )
 {%- endif %}
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
 @click.option(
     "--model",
-    default="logistic_regression",
+    default="{{ sklearn_model_name }}",
     type=click.Choice(SklearnClassifierModel.values()),
     help="The scikit-learn model to train.",
 )
@@ -231,12 +231,12 @@ Examples:
 {%- endif %}
 def main(
     no_cache: bool = False,
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
-    dataset: str = SklearnDataset.wine.value,
+{%- if use_step_params %}
+{%- if configurable_dataset %}
+    dataset: str = "{{ sklearn_dataset_name }}",
 {%- endif %}
-{%- if configurable_model == 'y' %}
-    model: str = SklearnClassifierModel.logistic_regression.value,
+{%- if configurable_model %}
+    model: str = "{{ sklearn_model_name }}",
 {%- endif %}
     no_drop_na: bool = False,
     drop_columns: Optional[str] = None,
@@ -268,8 +268,8 @@ def main(
     # then passed to the pipeline constructor. The result is a pipeline
     # instance that is ready to be run.
     pipeline = model_training_pipeline(
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_dataset %}
         data_loader=data_loader(
             params=DataLoaderStepParameters(
                 dataset=SklearnDataset(dataset),
@@ -295,7 +295,7 @@ def main(
         ),
         model_trainer=model_trainer(
             params=ModelTrainerStepParameters(
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
                 model=SklearnClassifierModel(model),
 {%- endif %}
                 random_state=random_state,

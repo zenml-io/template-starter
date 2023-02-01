@@ -121,9 +121,7 @@ sklearn_model_name:
 _templates_suffix: ""
 _subdirectory: "{{ template }}"
 _exclude:
-    - templates
-    - README.md
-    - config.yaml
+    - /README.md
 _tasks:
     - |
         {{ _copier_python }} -m autoflake --remove-all-unused-imports \

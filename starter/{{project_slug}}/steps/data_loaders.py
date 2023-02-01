@@ -1,11 +1,11 @@
 {% include 'templates/license_header' %}
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
 from typing import List
 {%- endif %}
 import pandas as pd
 
 from sklearn.datasets import (
-{%- if use_step_params == 'y' and configurable_dataset == 'y'  %}
+{%- if use_step_params and configurable_dataset  %}
     load_wine,
     load_breast_cancer,
     load_iris,
@@ -14,11 +14,11 @@ from sklearn.datasets import (
 {%- endif %}
 )
 from sklearn.model_selection import train_test_split
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
 from zenml.enums import StrEnum
 {%- endif %}
 from zenml.steps import (
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
     BaseParameters,
 {%- endif %}
     Output,
@@ -28,7 +28,7 @@ from zenml.logger import get_logger
 
 logger = get_logger(__name__)
 
-{% if use_step_params == 'y' and configurable_dataset == 'y' %}
+{% if use_step_params and configurable_dataset %}
 class SklearnDataset(StrEnum):
     """Built-in scikit-learn datasets."""
     wine = "wine"
@@ -144,7 +144,7 @@ def data_loader() -> Output(
 
     return dataset
 {% endif %}
-{% if use_step_params == 'y' %}
+{% if use_step_params %}
 class DataProcessorStepParameters(BaseParameters):
     """Parameters for the data processor step.
 

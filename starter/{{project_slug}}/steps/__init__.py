@@ -4,8 +4,8 @@ from steps.data_loaders import (
     data_loader, 
     data_processor, 
     data_splitter,
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_dataset %}
     DataLoaderStepParameters,
     SklearnDataset,
 {%- endif %}
@@ -16,8 +16,8 @@ from steps.data_loaders import (
 from steps.model_trainers import (
     model_trainer,
     model_evaluator,
-{%- if use_step_params == 'y' %}
-{%- if configurable_model == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_model %}
     SklearnClassifierModel,
 {%- endif %}
     ModelTrainerStepParameters,
@@ -31,14 +31,14 @@ __all__ = [
     "data_splitter",
     "model_trainer",
     "model_evaluator",
-{%- if use_step_params == 'y' %}
-{%- if configurable_dataset == 'y' %}
+{%- if use_step_params %}
+{%- if configurable_dataset %}
     "DataLoaderStepParameters",
     "SklearnDataset",
 {%- endif %}
     "DataProcessorStepParameters",
     "DataSplitterStepParameters",
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
     "SklearnClassifierModel",
 {%- endif %}
     "ModelTrainerStepParameters",

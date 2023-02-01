@@ -32,30 +32,29 @@ other ML framework.
 ## 📃 Template Parameters
 
 | Parameter | Description | Default |
-|------------------|-----------------------------------------------------------------------------------|--|
-| full_name | Your name or the name of your organization (shown in the generated license) | ZenML GmbH |
-| email | Your email address (shown in the generated license) | info@zenml.io |
-| project_name | A name for your project | ZenML Starter |
-| project_slug | A slugified version of the project name (automatically generated from the project name) | zenml_starter |
-| project_short_description | A short description of your project | |
-| version | The version of your project | 0.1.0 |
-| open_source_license | The license under which your project will be released (one of `Apache Software License 2.0`, `MIT license`, `BSD license`, `ISC license`, `GNU General Public License v3` and `Not open source`) | Apache Software License 2.0 |
-| use_step_params | Whether to showcase using parameters for the ZenML steps in the project (`y` or `n`). If selected, all generated ZenML pipeline steps will be parameterized. | n |
-| use_custom_artifacts | Whether to showcase using custom data types for the ZenML artifacts in the project (`y` or `n`). If selected, the generated code will demonstrate the use of custom artifact data types and materializers in the generated steps and pipelines. | n |
-| sklearn_dataset_name | The name of the builtin scikit-learn dataset to use in the project (one of `Iris`, `Breast Cancer` and `Wine`) | Wine |
-| sklearn_model_name | The name of the builtin scikit-learn model to use in the project (one of `Logistic Regression`, `SVC`, `Linear SVC`, `Random Forest`, `KNN`, `Gaussian NB`, `Perceptron`, `SGD Classifier` and `Decision Tree`) | Logistic Regression |
-| configurable_dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (`y` or `n`). Only has effect if the step parameters were also selected. | n |
-| configurable_model | Whether to make the model a configurable parameter of the model trainer step and CLI (`y` or `n`). Only has effect if the step parameters were also selected. | n |
-| auto_format | Whether to automatically format and cleanup the generated code with [black](https://black.readthedocs.io/), [ruff](https://beta.ruff.rs/docs/) and [autoflake](https://github.com/PyCQA/autoflake) (`y` or `n`). You also need to have these Python packages installed for this option to take effect. | n |
+|------------------|--|--|
+| Name | The name of the person/entity holding the copyright | ZenML GmbH |
+| Email | The email of the person/entity holding the copyright | info@zenml.io |
+| Project Name | Short name for your project | ZenML Starter |
+| Project Slug | A slugified version of the project name (automatically generated from the project name) | zenml_starter |
+| Project Version | The version of your project | 0.1.0 |
+| Project License | The license under which your project will be released (one of `Apache Software License 2.0`, `MIT license`, `BSD license`, `ISC license`, `GNU General Public License v3` and `Not open source`) | Apache Software License 2.0 |
+| Auto-Format | Whether to automatically format and cleanup the generated code with [black](https://black.readthedocs.io/), [ruff](https://beta.ruff.rs/docs/) and [autoflake](https://github.com/PyCQA/autoflake) (yes/no). You also need to have these Python packages installed for this option to take effect. | no |
+| Use ZenML Step Params | Whether to showcase using parameters for the ZenML steps in the project (yes/no). If selected, all generated ZenML pipeline steps will be parameterized. | no |
+| Use ZenML Materializers | Whether to showcase using custom data types for the ZenML artifacts in the project (yes/no). If selected, the generated code will demonstrate the use of custom artifact data types and materializers in the generated steps and pipelines. | no |
+| UCI Dataset | The name of the UCI provided scikit-learn dataset to use in the project (one of `Iris`, `Breast Cancer` and `Wine`) | Wine |
+| Scikit-learn Model | The name of the scikit-learn classifier model to use in the project (one of `Logistic Regression`, `SVC`, `Linear SVC`, `Random Forest`, `KNN`, `Gaussian NB`, `Perceptron`, `SGD Classifier` and `Decision Tree`) | Logistic Regression |
+| Runtime Configurable Dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
+| Runtime Configurable Model | Whether to make the model a configurable parameter of the model trainer step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
 
 
 ## 📦 Prerequisites
 
-To use the template, you need to have cookieninja installed, along with the
-ansible Jinja2 filter library. You can install them by running:
+To use the templates, you need to have [`copier`](https://copier.readthedocs.io/en/stable/)
+installed, along with some basic Jinja filters. You can install them by running:
 
 ```bash
-pip install cookieninja jinja2-ansible-filters
+pip install copier jinja2-time
 ```
 
 If you also want to cleanup and format the generated project code, to avoid
@@ -67,15 +66,15 @@ dependencies:
 pip install black ruff autoflake
 ```
 
-You can enable the automatic cleanup and formatting by setting the
-`auto_format` parameter to `y` when generating the project.
+You can enable the automatic cleanup and formatting by enabling the
+auto-formatting option when prompted by the template generator..
 
 ## 🚀 Generate a ZenML Project
 
 You can generate a project from this templates by running:
 
 ```bash
-cookieninja gh:zenml-io/zenml-project-templates --directory=starter
+copier gh:zenml-io/zenml-project-templates
 ```
 
 You will be prompted to enter various values for the template variables. Once

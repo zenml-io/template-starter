@@ -1,12 +1,12 @@
 {% include 'templates/license_header' %}
 
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
 from typing import Any, Dict
 {%- endif %}
 import pandas as pd
 
 from sklearn.base import ClassifierMixin
-{%- if use_step_params == 'y' and configurable_model == 'y' %}
+{%- if use_step_params and configurable_model %}
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
@@ -35,12 +35,12 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 {%- endif %}
 
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
 from zenml.enums import StrEnum
 {%- endif %}
 from zenml.logger import get_logger
 from zenml.steps import (
-{%- if use_step_params == 'y' %}
+{%- if use_step_params %}
     BaseParameters,
 {%- endif %}
     Output,
@@ -49,8 +49,8 @@ from zenml.steps import (
 
 logger = get_logger(__name__)
 
-{% if use_step_params == 'y' %}
-{%- if configurable_model == 'y' %}
+{% if use_step_params %}
+{%- if configurable_model %}
 class SklearnClassifierModel(StrEnum):
     """Scikit-learn models used for classification."""
     LogisticRegression = "LogisticRegression"
@@ -74,7 +74,7 @@ class ModelTrainerStepParameters(BaseParameters):
     """
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
     # The name of the scikit-learn classifier model to train.
     model: SklearnClassifierModel = SklearnClassifierModel.{{ sklearn_model_name }}
 {%- endif %}
@@ -119,7 +119,7 @@ def model_trainer(
     
     This step is parameterized using the `ModelTrainerStepParameters` class,
     which allows you to configure the step independently of the step code,
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
     before running it in a pipeline. In this example, the step can be configured
     to use a different model, change the random seed, or pass different
     hyperparameters to the model constructor. See the documentation for more
@@ -145,7 +145,7 @@ def model_trainer(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Initialize the model with the hyperparameters indicated in the step
     # parameters and train it on the training set.
-{%- if configurable_model == 'y' %}
+{%- if configurable_model %}
     if params.model == SklearnClassifierModel.LogisticRegression:
         model = LogisticRegression(
             random_state=params.random_state,

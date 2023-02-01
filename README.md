@@ -26,16 +26,15 @@ pip install copier jinja2-time
 You can generate a project from one of the existing templates by running e.g.:
 
 ```bash
-copier gh:zenml-io/zenml-project-templates --directory=starter
+copier gh:zenml-io/zenml-project-templates
 ```
 
-where `starter` is the name of the template you want to use.
-
-You will be prompted to enter various values for the template variables. Once
-you have entered them, the project will be generated in a subdirectory.
+You will be prompted to select the project template and enter various values for
+the template variables. Once you have entered them, the project will be
+generated in a subdirectory.
 
 ## 📃 List of Project Templates
 
 | Project Template | Tags     | Description                                                                       |
 |------------------|----------|-----------------------------------------------------------------------------------|
-| [starter](https://github.com/zenml-io/zenml-project-templates/tree/main/starter) | basic scikit-learn | All the basic ML ingredients you need to get you started with ZenML: parameterized steps, a model training pipeline, a flexible configuration and a simple CLI. All created around a representative and versatile model training use-case implemented with the scikit-learn library. |
+| [ZenML Starter](https://github.com/zenml-io/zenml-project-templates/tree/main/starter) | basic scikit-learn | All the basic ML ingredients you need to get you started with ZenML: parameterized steps, a model training pipeline, a flexible configuration and a simple CLI. All created around a representative and versatile model training use-case implemented with the scikit-learn library. |
