@@ -1,4 +1,4 @@
-{% include 'license_header' %}
+{% include 'templates/license_header' %}
 
 from pipelines.model_training import model_training_pipeline
 

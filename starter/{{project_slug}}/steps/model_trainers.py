@@ -1,12 +1,12 @@
-{% include 'license_header' %}
+{% include 'templates/license_header' %}
 
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
 from typing import Any, Dict
 {%- endif %}
 import pandas as pd
 
 from sklearn.base import ClassifierMixin
-{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_model == 'y' %}
+{%- if use_step_params == 'y' and configurable_model == 'y' %}
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
@@ -15,32 +15,32 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import Perceptron
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
-{%- elif cookiecutter.sklearn_model_name == 'Logistic Regression' %}
+{%- elif sklearn_model_name == 'Logistic Regression' %}
 from sklearn.linear_model import LogisticRegression
-{%- elif cookiecutter.sklearn_model_name == 'SVC' %}
+{%- elif sklearn_model_name == 'SVC' %}
 from sklearn.svm import SVC
-{%- elif cookiecutter.sklearn_model_name == 'Linear SVC' %}
+{%- elif sklearn_model_name == 'Linear SVC' %}
 from sklearn.svm import LinearSVC
-{%- elif cookiecutter.sklearn_model_name == 'Random Forest' %}
+{%- elif sklearn_model_name == 'Random Forest' %}
 from sklearn.ensemble import RandomForestClassifier
-{%- elif cookiecutter.sklearn_model_name == 'KNN' -%}
+{%- elif sklearn_model_name == 'KNN' -%}
 from sklearn.neighbors import KNeighborsClassifier
-{%- elif cookiecutter.sklearn_model_name == 'Gaussian NB' %}
+{%- elif sklearn_model_name == 'Gaussian NB' %}
 from sklearn.naive_bayes import GaussianNB
-{%- elif cookiecutter.sklearn_model_name == 'Perceptron' %}
+{%- elif sklearn_model_name == 'Perceptron' %}
 from sklearn.linear_model import Perceptron
-{%- elif cookiecutter.sklearn_model_name == 'SGD Classifier' %}
+{%- elif sklearn_model_name == 'SGD Classifier' %}
 from sklearn.linear_model import SGDClassifier
-{%- elif cookiecutter.sklearn_model_name == 'Decision Tree' %}
+{%- elif sklearn_model_name == 'Decision Tree' %}
 from sklearn.tree import DecisionTreeClassifier
 {%- endif %}
 
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
 from zenml.enums import StrEnum
 {%- endif %}
 from zenml.logger import get_logger
 from zenml.steps import (
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
     BaseParameters,
 {%- endif %}
     Output,
@@ -49,8 +49,8 @@ from zenml.steps import (
 
 logger = get_logger(__name__)
 
-{% if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_model == 'y' %}
+{% if use_step_params == 'y' %}
+{%- if configurable_model == 'y' %}
 class SklearnClassifierModel(StrEnum):
     """Scikit-learn models used for classification."""
     logistic_regression = "logistic_regression"
@@ -74,9 +74,9 @@ class ModelTrainerStepParameters(BaseParameters):
     """
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     # The name of the scikit-learn classifier model to train.
-    model: SklearnClassifierModel = SklearnClassifierModel.{{ cookiecutter.sklearn_model_name | lower | replace(' ', '_') }}
+    model: SklearnClassifierModel = SklearnClassifierModel.{{ sklearn_model_name | lower | replace(' ', '_') }}
 {%- endif %}
     # The random seed to use for reproducibility.
     random_state: int = 42
@@ -119,7 +119,7 @@ def model_trainer(
     
     This step is parameterized using the `ModelTrainerStepParameters` class,
     which allows you to configure the step independently of the step code,
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     before running it in a pipeline. In this example, the step can be configured
     to use a different model, change the random seed, or pass different
     hyperparameters to the model constructor. See the documentation for more
@@ -145,7 +145,7 @@ def model_trainer(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Initialize the model with the hyperparameters indicated in the step
     # parameters and train it on the training set.
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     if params.model == SklearnClassifierModel.logistic_regression:
         model = LogisticRegression(
             random_state=params.random_state,
@@ -185,23 +185,23 @@ def model_trainer(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-{%- elif cookiecutter.sklearn_model_name == 'Logistic Regression' %}
+{%- elif sklearn_model_name == 'Logistic Regression' %}
     model = LogisticRegression(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'SVC' %}
+{%- elif sklearn_model_name == 'SVC' %}
     model = SVC(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Linear SVC' %}
+{%- elif sklearn_model_name == 'Linear SVC' %}
     model = LinearSVC(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Random Forest' %}
+{%- elif sklearn_model_name == 'Random Forest' %}
     model = RandomForestClassifier(n_estimators=100)
-{%- elif cookiecutter.sklearn_model_name == 'KNN' -%}
+{%- elif sklearn_model_name == 'KNN' -%}
     model = KNeighborsClassifier(n_neighbors = 3)
-{%- elif cookiecutter.sklearn_model_name == 'Gaussian NB' %}
+{%- elif sklearn_model_name == 'Gaussian NB' %}
     model = GaussianNB()
-{%- elif cookiecutter.sklearn_model_name == 'Perceptron' %}
+{%- elif sklearn_model_name == 'Perceptron' %}
     model = Perceptron(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'SGD Classifier' %}
+{%- elif sklearn_model_name == 'SGD Classifier' %}
     model = SGDClassifier(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Decision Tree' %}
+{%- elif sklearn_model_name == 'Decision Tree' %}
     model = DecisionTreeClassifier(random_state=42)
 {%- endif %}    
 
@@ -368,23 +368,23 @@ def model_trainer(
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Train a model on the training set.
-{%- if cookiecutter.sklearn_model_name == 'Logistic Regression' %}
+{%- if sklearn_model_name == 'Logistic Regression' %}
     model = LogisticRegression(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'SVC' %}
+{%- elif sklearn_model_name == 'SVC' %}
     model = SVC(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Linear SVC' %}
+{%- elif sklearn_model_name == 'Linear SVC' %}
     model = LinearSVC(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Random Forest' %}
+{%- elif sklearn_model_name == 'Random Forest' %}
     model = RandomForestClassifier(n_estimators=100)
-{%- elif cookiecutter.sklearn_model_name == 'KNN' -%}
+{%- elif sklearn_model_name == 'KNN' -%}
     model = KNeighborsClassifier(n_neighbors = 3)
-{%- elif cookiecutter.sklearn_model_name == 'Gaussian NB' %}
+{%- elif sklearn_model_name == 'Gaussian NB' %}
     model = GaussianNB()
-{%- elif cookiecutter.sklearn_model_name == 'Perceptron' %}
+{%- elif sklearn_model_name == 'Perceptron' %}
     model = Perceptron(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'SGD Classifier' %}
+{%- elif sklearn_model_name == 'SGD Classifier' %}
     model = SGDClassifier(random_state=42)
-{%- elif cookiecutter.sklearn_model_name == 'Decision Tree' %}
+{%- elif sklearn_model_name == 'Decision Tree' %}
     model = DecisionTreeClassifier(random_state=42)
 {%- endif %}
     logger.info(f"Training model {model}...")

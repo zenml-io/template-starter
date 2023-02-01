@@ -1,5 +1,5 @@
-cookieninja
-jinja2-ansible-filters
+copier
+jinja2-time
 black
 ruff
 autoflake

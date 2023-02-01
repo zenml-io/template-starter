@@ -1,4 +1,4 @@
-{% include 'license_header' %}
+{% include 'templates/license_header' %}
 
 from zenml.pipelines import pipeline
 

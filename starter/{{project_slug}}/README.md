@@ -1,4 +1,4 @@
-# {{cookiecutter.project_name}}
+# {{project_name}}
 
 This is a basic supervised learning ML project built with the
 ZenML framework and its scikit-learn integration. The project trains one or more
@@ -6,25 +6,25 @@ scikit-learn classification models to make predictions on one of the tabular
 classification datasets provided by the scikit-learn library. The project was
 generated from the [starter ZenML project template](https://github.com/zenml-io/zenml-project-templates/tree/main/starter)
 with the following optional features enabled:
-{%- if cookiecutter.use_step_params == "y" %}
+{%- if use_step_params == "y" %}
 - parameterized ZenML steps
 - ability to control the ZenML step parameters using the CLI
-{%- if cookiecutter.configurable_dataset == "y" %}
+{%- if configurable_dataset == "y" %}
 - ability to dynamically select and use a different dataset at runtime using the
 CLI and/or a data loader step parameter
 {%- endif %}
-{%- if cookiecutter.configurable_model == "y" %}
+{%- if configurable_model == "y" %}
 - ability to dynamically select and train a different classification model at
 runtime using the CLI and/or a model trainer step parameter
 {%- endif %}
 {%- endif %}
-{%- if cookiecutter.use_custom_artifacts == "y" %}
+{%- if use_custom_artifacts == "y" %}
 - using custom data types for step artifacts and implementing custom materializers 
 {%- endif %}
 
 ## 👋 Introduction
 
-Welcome to your newly generated {{cookiecutter.project_name}} project! This is
+Welcome to your newly generated {{project_name}} project! This is
 a great way to get started with ZenML. The project contains a collection of
 basic ZenML steps, pipelines, stack configurations and other artifacts and
 useful resources that can serve as a starting point for your journey with
@@ -71,7 +71,7 @@ what you can do with ZenML.
 
 ## 📦 What's in the box?
 
-The {{ cookiecutter.project_name }} project showcases a basic ZenML model
+The {{ project_name }} project showcases a basic ZenML model
 training pipeline with all the usual components you would expect to find in
 a simple machine learning project such as this one:
 

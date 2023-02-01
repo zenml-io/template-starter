@@ -1,0 +1,125 @@
+# PROMPT --------------------------------
+
+full_name:
+    type: str
+    help: >-
+        The name of the person/entity holding the copyright
+    default: ZenML GmbH
+email:
+    type: str
+    help: >-
+        The email of the person/entity holding the copyright
+    default: info@zenml.io
+project_name:
+    type: str
+    help: Short name for your project
+    default: ZenML Starter
+project_slug:
+    type: str
+    help: >-
+        A slugified version of the project name (automatically generated from
+        the project name)
+    default: "{{ project_name.lower().replace(' ', '_').replace('-', '_') }}"
+version:
+    type: str
+    help: |
+        Version of your project
+    default: "0.1.0"
+open_source_license:
+    type: str
+    help: >-
+        The license under which your project will be released
+    choices:
+        - Apache Software License 2.0: apache
+        - MIT license: mit
+        - BSD license: bsd
+        - ISC license: isc
+        - GNU General Public License v3: gpl3
+        - Not open source: none
+    default: apache
+use_step_params:
+    type: bool
+    help: >-
+        Would you like to see step parameters being used in the generated ZenML
+        steps?
+    default: false
+use_custom_artifacts:
+    type: bool
+    help: >-
+        Would you like to see custom artifact data types and materializers being
+        used in the generated ZenML steps and pipelines?
+    default: false
+configurable_dataset:
+    type: bool
+    help: >-
+        Would you like to be able to select the dataset used in model training
+        at runtime through the CLI and as a data loader step parameter ?
+    default: false
+    when: use_step_params
+sklearn_dataset_name:
+    type: str
+    help: >-
+        {% if configurable_dataset %}
+        The default dataset to use if one is not explicitly selected at runtime.
+        {% else %}
+        The dataset you would like to use to train your model.
+        {% endif %}
+    choices:
+        - UCI Wine Data Set (classification): wine
+        - UCI Iris Data Set (classification): iris
+        - UCI Breast Cancer Wisconsin (Diagnostic) Data Set (classification): breast_cancer
+    default: wine
+configurable_model:
+    type: bool
+    help: >-
+        Would you like to be able to select the type of model used in model
+        training at runtime through the CLI and as a model trainer step
+        parameter ?
+    default: false
+    when: use_step_params
+sklearn_model_name:
+    type: str
+    help: >-
+        {% if configurable_model %}
+        The default model type to use if one is not explicitly selected at
+        runtime.
+        {% else %}
+        The type of model you would like to train.
+        {% endif %}
+    choices:
+        - Logistic Regression: LogisticRegression
+        - C-Support Vector Classification: SVC
+        - Linear Support Vector Classification: LinearSVC
+        - Random Forest Classifier: RandomForestClassifier
+        - K-Nearest Neighbors Classifier: KNN
+        - Gaussian Naive Bayes: GaussianNB
+        - Linear Perceptron Classifier: Perceptron
+        - Stochastic Gradient Descent Linear Classifier: SGDClassifier
+        - Decision Tree Classifier: DecisionTreeClassifier
+    default: LogisticRegression
+auto_format:
+    type: bool
+    help: >-
+        Auto-format the generated code with black, ruff and autoflake ? (NOTE:
+        you need to have these tools installed in your environment)
+    default: false
+
+# CONFIGURATION -------------------------
+_templates_suffix: ""
+_exclude:
+    - templates
+_tasks:
+    - export SRC="pipelines steps run.py"
+    - |
+        {{ _copier_python }} -m autoflake --remove-all-unused-imports
+            --recursive
+            --remove-unused-variables
+            --in-place $SRC
+            --exclude=__init__.py || true
+    - |
+        {{ _copier_python }} -m ruff $SRC --select I --fix --ignore D || true
+    - |
+        {{ _copier_python }} -m black
+            --exclude '' --include '\.pyi?$' -l 79 || true
+_jinja_extensions:
+    - jinja2_time.TimeExtension

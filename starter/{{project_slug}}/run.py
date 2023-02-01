@@ -1,4 +1,4 @@
-{% include 'license_header' %}
+{% include 'templates/license_header' %}
 
 import click
 from typing import Any, Dict, Optional
@@ -8,8 +8,8 @@ from steps import (
     data_splitter,
     model_trainer,
     model_evaluator,
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
     SklearnDataset,
     DataLoaderStepParameters,
 {%- endif %}
@@ -17,7 +17,7 @@ from steps import (
     DataSplitterStepParameters,
     ModelTrainerStepParameters,
     ModelEvaluatorStepParameters,
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     SklearnClassifierModel,
 {%- endif %}
 {%- endif %}
@@ -26,7 +26,7 @@ from pipelines import (
     model_training_pipeline,
 )
 
-{% if cookiecutter.use_step_params == 'y' %}
+{% if use_step_params == 'y' %}
 def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
     """Process hyper parameters entered by the user from the command line.
     
@@ -75,9 +75,9 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
 
 {% endif %}
 @click.command(help="""
-{{ cookiecutter.project_name }} CLI.
+{{ project_name }} CLI.
 
-Run the {{ cookiecutter.project_name }} model training pipeline with various
+Run the {{ project_name }} model training pipeline with various
 options.
 
 Examples:
@@ -90,21 +90,21 @@ Examples:
   # Run the pipeline with caching disabled
   python run.py --no-cache
 
-{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' and configurable_dataset == 'y' %}
 
   \b
   # Run the pipeline with a different dataset
   python run.py --dataset=diabetes
 {%- endif %}
 
-{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_model == 'y' %}
+{%- if use_step_params == 'y' and configurable_model == 'y' %}
 
   \b
   # Run the pipeline with a different model
   python run.py --model=svm
 {%- endif %}
 
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
 
   \b
   # Run the pipeline with custom hyperparameters for the model training step
@@ -134,8 +134,8 @@ Examples:
     default=False,
     help="Disable caching for the pipeline run.",
 )
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
 @click.option(
     "--dataset",
     default="wine",
@@ -143,7 +143,7 @@ Examples:
     help="The scikit-learn dataset to load.",
 )
 {%- endif %}
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
 @click.option(
     "--model",
     default="logistic_regression",
@@ -231,11 +231,11 @@ Examples:
 {%- endif %}
 def main(
     no_cache: bool = False,
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
     dataset: str = SklearnDataset.wine.value,
 {%- endif %}
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     model: str = SklearnClassifierModel.logistic_regression.value,
 {%- endif %}
     no_drop_na: bool = False,
@@ -268,8 +268,8 @@ def main(
     # then passed to the pipeline constructor. The result is a pipeline
     # instance that is ready to be run.
     pipeline = model_training_pipeline(
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
         data_loader=data_loader(
             params=DataLoaderStepParameters(
                 dataset=SklearnDataset(dataset),
@@ -295,7 +295,7 @@ def main(
         ),
         model_trainer=model_trainer(
             params=ModelTrainerStepParameters(
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
                 model=SklearnClassifierModel(model),
 {%- endif %}
                 random_state=random_state,

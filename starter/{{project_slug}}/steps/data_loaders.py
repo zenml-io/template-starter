@@ -1,24 +1,24 @@
-{% include 'license_header' %}
-{%- if cookiecutter.use_step_params == 'y' %}
+{% include 'templates/license_header' %}
+{%- if use_step_params == 'y' %}
 from typing import List
 {%- endif %}
 import pandas as pd
 
 from sklearn.datasets import (
-{%- if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y'  %}
+{%- if use_step_params == 'y' and configurable_dataset == 'y'  %}
     load_wine,
     load_breast_cancer,
     load_iris,
 {%- else %}
-    load_{{ cookiecutter.sklearn_dataset_name | lower | replace(' ', '_') }},
+    load_{{ sklearn_dataset_name | lower | replace(' ', '_') }},
 {%- endif %}
 )
 from sklearn.model_selection import train_test_split
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
 from zenml.enums import StrEnum
 {%- endif %}
 from zenml.steps import (
-{%- if cookiecutter.use_step_params == 'y' %}
+{%- if use_step_params == 'y' %}
     BaseParameters,
 {%- endif %}
     Output,
@@ -28,7 +28,7 @@ from zenml.logger import get_logger
 
 logger = get_logger(__name__)
 
-{% if cookiecutter.use_step_params == 'y' and cookiecutter.configurable_dataset == 'y' %}
+{% if use_step_params == 'y' and configurable_dataset == 'y' %}
 class SklearnDataset(StrEnum):
     """Built-in scikit-learn datasets."""
     wine = "wine"
@@ -46,7 +46,7 @@ class DataLoaderStepParameters(BaseParameters):
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # The name of the built-in scikit-learn dataset to load.
-    dataset: SklearnDataset = SklearnDataset.{{ cookiecutter.sklearn_dataset_name | lower | replace(' ', '_') }}
+    dataset: SklearnDataset = SklearnDataset.{{ sklearn_dataset_name | lower | replace(' ', '_') }}
     ### YOUR CODE ENDS HERE ###
 
     class Config:
@@ -136,15 +136,15 @@ def data_loader() -> Output(
         The loaded dataset artifact.
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Load the {{ cookiecutter.sklearn_dataset_name }} dataset and format it as a pandas DataFrame
-    dataset = load_{{ cookiecutter.sklearn_dataset_name | lower | replace(' ', '_') }}(as_frame=True).frame
+    # Load the {{ sklearn_dataset_name }} dataset and format it as a pandas DataFrame
+    dataset = load_{{ sklearn_dataset_name | lower | replace(' ', '_') }}(as_frame=True).frame
     dataset.info()
     logger.info(dataset.head())
     ### YOUR CODE ENDS HERE ###
 
     return dataset
 {% endif %}
-{% if cookiecutter.use_step_params == 'y' %}
+{% if use_step_params == 'y' %}
 class DataProcessorStepParameters(BaseParameters):
     """Parameters for the data processor step.
 

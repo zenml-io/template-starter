@@ -1,11 +1,11 @@
-{% include 'license_header' %}
+{% include 'templates/license_header' %}
 
 from steps.data_loaders import (
     data_loader, 
     data_processor, 
     data_splitter,
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
     DataLoaderStepParameters,
     SklearnDataset,
 {%- endif %}
@@ -16,8 +16,8 @@ from steps.data_loaders import (
 from steps.model_trainers import (
     model_trainer,
     model_evaluator,
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_model == 'y' %}
     SklearnClassifierModel,
 {%- endif %}
     ModelTrainerStepParameters,
@@ -31,14 +31,14 @@ __all__ = [
     "data_splitter",
     "model_trainer",
     "model_evaluator",
-{%- if cookiecutter.use_step_params == 'y' %}
-{%- if cookiecutter.configurable_dataset == 'y' %}
+{%- if use_step_params == 'y' %}
+{%- if configurable_dataset == 'y' %}
     "DataLoaderStepParameters",
     "SklearnDataset",
 {%- endif %}
     "DataProcessorStepParameters",
     "DataSplitterStepParameters",
-{%- if cookiecutter.configurable_model == 'y' %}
+{%- if configurable_model == 'y' %}
     "SklearnClassifierModel",
 {%- endif %}
     "ModelTrainerStepParameters",
