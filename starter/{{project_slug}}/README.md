@@ -24,7 +24,7 @@ runtime using the CLI and/or a model trainer step parameter
 
 ## 👋 Introduction
 
-Welcome to your newly generated {{project_name}} project! This is
+Welcome to your newly generated "{{project_name}}" project! This is
 a great way to get started with ZenML. The project contains a collection of
 basic ZenML steps, pipelines, stack configurations and other artifacts and
 useful resources that can serve as a starting point for your journey with
@@ -41,10 +41,8 @@ is going on under the hood:
 # Set up a Python virtual environment, if you haven't already
 virtualenv .venv
 source .venv/bin/activate
-# Install ZenML, with the server extension
-pip install zenml[server]
-# Install the scikit-learn integration
-zenml integration install -y sklearn
+# Install requirements
+pip install -r requirements.txt
 # Start the ZenML UI locally (recommended, but optional);
 # the default username is "admin" with an empty password
 zenml up
@@ -62,6 +60,9 @@ Next, you should:
 ```bash
 python run.py --help
 ```
+* go back and [try out different parameters](https://github.com/zenml-io/zenml-project-templates/tree/main/starter#-template-parameters)
+for your generated project. For example, you could enable generating step
+parameters or custom materializers for your project, if you haven't already. 
 * take a look at [the project structure](#📜-project-structure) and the code
 itself. The code is heavily commented and should be easy to follow.
 * read the [ZenML documentation](https://docs.zenml.io) to learn more about

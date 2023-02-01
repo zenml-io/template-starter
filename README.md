@@ -33,6 +33,14 @@ You will be prompted to select the project template and enter various values for
 the template variables. Once you have entered them, the project will be
 generated in a subdirectory.
 
+To update an already generated project, with different parameters you can run
+the same command again. If you want to skip the prompts to use the values you
+already entered and overwrite all files in the existing project, you can run:
+
+```bash
+copier -wf gh:zenml-io/zenml-project-templates .
+```
+
 ## 📃 List of Project Templates
 
 | Project Template | Tags     | Description                                                                       |

@@ -58,21 +58,21 @@ use_step_params:
         Would you like to see step parameters being used in the generated ZenML
         steps?
     default: false
-    when: template == 'starter'
+    when: "{{ template == 'starter' }}"
 use_custom_artifacts:
     type: bool
     help: >-
         Would you like to see custom artifact data types and materializers being
         used in the generated ZenML steps and pipelines?
     default: false
-    when: template == 'starter'
+    when: "{{ template == 'starter' }}"
 configurable_dataset:
     type: bool
     help: >-
         Would you like to be able to select the dataset used in model training
         at runtime through the CLI and as a data loader step parameter ?
     default: false
-    when: use_step_params
+    when: "{{ template == 'starter' and use_step_params }}"
 sklearn_dataset_name:
     type: str
     help: >-
@@ -86,7 +86,7 @@ sklearn_dataset_name:
         UCI Iris Data Set (classification): iris
         UCI Breast Cancer Wisconsin (Diagnostic) Data Set (classification): breast_cancer
     default: wine
-    when: template == 'starter'
+    when: "{{ template == 'starter' }}"
 configurable_model:
     type: bool
     help: >-
@@ -94,7 +94,7 @@ configurable_model:
         training at runtime through the CLI and as a model trainer step
         parameter ?
     default: false
-    when: template == 'starter' and use_step_params
+    when: "{{ template == 'starter' and use_step_params }}"
 sklearn_model_name:
     type: str
     help: >-
@@ -115,7 +115,7 @@ sklearn_model_name:
         Stochastic Gradient Descent Linear Classifier: SGDClassifier
         Decision Tree Classifier: DecisionTreeClassifier
     default: LogisticRegression
-    when: template == 'starter'
+    when: "{{ template == 'starter' }}"
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""
@@ -138,5 +138,8 @@ _tasks:
         {{ _copier_python }} -m black \
             --exclude '' --include '\.pyi?$' -l 79 \
             {{ project_slug }} > /dev/null 2>&1 || true
+    - |
+        cat {{ project_slug }}/WELCOME.txt && rm {{ project_slug }}/WELCOME.txt
+
 _jinja_extensions:
     - jinja2_time.TimeExtension

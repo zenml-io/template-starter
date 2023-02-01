@@ -32,7 +32,7 @@ other ML framework.
 ## 📃 Template Parameters
 
 | Parameter | Description | Default |
-|------------------|--|--|
+|-----------|-------------|---------|
 | Name | The name of the person/entity holding the copyright | ZenML GmbH |
 | Email | The email of the person/entity holding the copyright | info@zenml.io |
 | Project Name | Short name for your project | ZenML Starter |
@@ -79,3 +79,11 @@ copier gh:zenml-io/zenml-project-templates .
 
 You will be prompted to enter various values for the template variables. Once
 you have entered them, the project will be generated in a subdirectory.
+
+To update an already generated project, with different parameters you can run
+the same command again. If you want to skip the prompts to use the values you
+already entered and overwrite all files in the existing project, you can run:
+
+```bash
+copier -wf gh:zenml-io/zenml-project-templates .
+```
