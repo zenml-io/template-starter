@@ -10,7 +10,7 @@ from sklearn.datasets import (
     load_breast_cancer,
     load_iris,
 {%- else %}
-    load_{{ sklearn_dataset_name | lower | replace(' ', '_') }},
+    load_{{ sklearn_dataset_name }},
 {%- endif %}
 )
 from sklearn.model_selection import train_test_split
@@ -46,7 +46,7 @@ class DataLoaderStepParameters(BaseParameters):
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # The name of the built-in scikit-learn dataset to load.
-    dataset: SklearnDataset = SklearnDataset.{{ sklearn_dataset_name | lower | replace(' ', '_') }}
+    dataset: SklearnDataset = SklearnDataset.{{ sklearn_dataset_name }}
     ### YOUR CODE ENDS HERE ###
 
     class Config:
@@ -137,7 +137,7 @@ def data_loader() -> Output(
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Load the {{ sklearn_dataset_name }} dataset and format it as a pandas DataFrame
-    dataset = load_{{ sklearn_dataset_name | lower | replace(' ', '_') }}(as_frame=True).frame
+    dataset = load_{{ sklearn_dataset_name }}(as_frame=True).frame
     dataset.info()
     logger.info(dataset.head())
     ### YOUR CODE ENDS HERE ###

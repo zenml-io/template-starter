@@ -14,11 +14,11 @@ message!
 
 ## 📦 Prerequisites
 
-To use the templates, you need to have cookieninja installed, along with the
-ansible Jinja2 filter library. You can install them by running:
+To use the templates, you need to have [`copier`](https://copier.readthedocs.io/en/stable/)
+installed, along with some basic Jinja filters. You can install them by running:
 
 ```bash
-pip install cookieninja jinja2-ansible-filters
+pip install copier jinja2-time
 ```
 
 ## 🚀 Generate a ZenML Project
@@ -26,7 +26,7 @@ pip install cookieninja jinja2-ansible-filters
 You can generate a project from one of the existing templates by running e.g.:
 
 ```bash
-cookieninja gh:zenml-io/zenml-project-templates --directory=starter
+copier gh:zenml-io/zenml-project-templates --directory=starter
 ```
 
 where `starter` is the name of the template you want to use.

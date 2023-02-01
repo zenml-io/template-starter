@@ -1,2 +1,2 @@
 {% include 'templates/license_header' %}
-__version__ = {{ version }}
+__version__ = "{{ version }}"

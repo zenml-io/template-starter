@@ -75,7 +75,7 @@ def process_hyper_parameters(params: Optional[str] = None) -> Dict[str, Any]:
 
 {% endif %}
 @click.command(help="""
-{{ project_name }} CLI.
+{{ project_name }} CLI v{{ version }}.
 
 Run the {{ project_name }} model training pipeline with various
 options.

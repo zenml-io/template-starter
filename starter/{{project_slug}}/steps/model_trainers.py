@@ -15,23 +15,23 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import Perceptron
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
-{%- elif sklearn_model_name == 'Logistic Regression' %}
+{%- elif sklearn_model_name == 'LogisticRegression' %}
 from sklearn.linear_model import LogisticRegression
 {%- elif sklearn_model_name == 'SVC' %}
 from sklearn.svm import SVC
-{%- elif sklearn_model_name == 'Linear SVC' %}
+{%- elif sklearn_model_name == 'LinearSVC' %}
 from sklearn.svm import LinearSVC
-{%- elif sklearn_model_name == 'Random Forest' %}
+{%- elif sklearn_model_name == 'RandomForestClassifier' %}
 from sklearn.ensemble import RandomForestClassifier
-{%- elif sklearn_model_name == 'KNN' -%}
+{%- elif sklearn_model_name == 'KNeighborsClassifier' -%}
 from sklearn.neighbors import KNeighborsClassifier
-{%- elif sklearn_model_name == 'Gaussian NB' %}
+{%- elif sklearn_model_name == 'GaussianNB' %}
 from sklearn.naive_bayes import GaussianNB
 {%- elif sklearn_model_name == 'Perceptron' %}
 from sklearn.linear_model import Perceptron
-{%- elif sklearn_model_name == 'SGD Classifier' %}
+{%- elif sklearn_model_name == 'SGDClassifier' %}
 from sklearn.linear_model import SGDClassifier
-{%- elif sklearn_model_name == 'Decision Tree' %}
+{%- elif sklearn_model_name == 'DecisionTreeClassifier' %}
 from sklearn.tree import DecisionTreeClassifier
 {%- endif %}
 
@@ -53,15 +53,15 @@ logger = get_logger(__name__)
 {%- if configurable_model == 'y' %}
 class SklearnClassifierModel(StrEnum):
     """Scikit-learn models used for classification."""
-    logistic_regression = "logistic_regression"
-    svc = "svc"
-    linear_svc = "linear_svc"
-    random_forest = "random_forest"
-    knn = "knn"
-    gaussian_nb = "gaussian_nb"
-    perceptron = "perceptron"
-    sgd_classifier = "sgd_classifier"
-    decision_tree = "decision_tree"
+    LogisticRegression = "LogisticRegression"
+    SVC = "SVC"
+    LinearSVC = "LinearSVC"
+    RandomForestClassifier = "RandomForestClassifier"
+    KNeighborsClassifier = "KNeighborsClassifier"
+    GaussianNB = "GaussianNB"
+    Perceptron = "Perceptron"
+    SGDClassifier = "SGDClassifier"
+    DecisionTreeClassifier = "DecisionTreeClassifier"
 {%- endif %}
 
 class ModelTrainerStepParameters(BaseParameters):
@@ -76,7 +76,7 @@ class ModelTrainerStepParameters(BaseParameters):
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
 {%- if configurable_model == 'y' %}
     # The name of the scikit-learn classifier model to train.
-    model: SklearnClassifierModel = SklearnClassifierModel.{{ sklearn_model_name | lower | replace(' ', '_') }}
+    model: SklearnClassifierModel = SklearnClassifierModel.{{ sklearn_model_name }}
 {%- endif %}
     # The random seed to use for reproducibility.
     random_state: int = 42
@@ -146,64 +146,52 @@ def model_trainer(
     # Initialize the model with the hyperparameters indicated in the step
     # parameters and train it on the training set.
 {%- if configurable_model == 'y' %}
-    if params.model == SklearnClassifierModel.logistic_regression:
+    if params.model == SklearnClassifierModel.LogisticRegression:
         model = LogisticRegression(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-    elif params.model == SklearnClassifierModel.svc:
+    elif params.model == SklearnClassifierModel.SVC:
         model = SVC(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-    elif params.model == SklearnClassifierModel.linear_svc:
+    elif params.model == SklearnClassifierModel.LinearSVC:
         model = LinearSVC(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-    elif params.model == SklearnClassifierModel.random_forest:
+    elif params.model == SklearnClassifierModel.RandomForestClassifier:
         model = RandomForestClassifier(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-    elif params.model == SklearnClassifierModel.knn:
+    elif params.model == SklearnClassifierModel.KNeighborsClassifier:
         model = KNeighborsClassifier(**params.hyperparameters)
-    elif params.model == SklearnClassifierModel.gaussian_nb:
+    elif params.model == SklearnClassifierModel.GaussianNB:
         model = GaussianNB(**params.hyperparameters)
-    elif params.model == SklearnClassifierModel.perceptron:
+    elif params.model == SklearnClassifierModel.Perceptron:
         model = Perceptron(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-    elif params.model == SklearnClassifierModel.sgd_classifier:
+    elif params.model == SklearnClassifierModel.SGDClassifier:
         model = SGDClassifier(
             random_state=params.random_state,
             **params.hyperparameters
         )
-    elif params.model == SklearnClassifierModel.decision_tree:
+    elif params.model == SklearnClassifierModel.DecisionTreeClassifier:
         model = DecisionTreeClassifier(
             random_state=params.random_state,
             **params.hyperparameters,
         )
-{%- elif sklearn_model_name == 'Logistic Regression' %}
-    model = LogisticRegression(random_state=42)
-{%- elif sklearn_model_name == 'SVC' %}
-    model = SVC(random_state=42)
-{%- elif sklearn_model_name == 'Linear SVC' %}
-    model = LinearSVC(random_state=42)
-{%- elif sklearn_model_name == 'Random Forest' %}
-    model = RandomForestClassifier(n_estimators=100)
-{%- elif sklearn_model_name == 'KNN' -%}
-    model = KNeighborsClassifier(n_neighbors = 3)
-{%- elif sklearn_model_name == 'Gaussian NB' %}
-    model = GaussianNB()
-{%- elif sklearn_model_name == 'Perceptron' %}
-    model = Perceptron(random_state=42)
-{%- elif sklearn_model_name == 'SGD Classifier' %}
-    model = SGDClassifier(random_state=42)
-{%- elif sklearn_model_name == 'Decision Tree' %}
-    model = DecisionTreeClassifier(random_state=42)
-{%- endif %}    
+{%- else %}
+{%- if not sklearn_model_name in [ 'KNeighborsClassifier', 'GaussianNB' ] %}
+    model = {{ sklearn_model_name }}(random_state=42, **params.hyperparameters)
+{%- else %}
+    model = {{ sklearn_model_name }}(**params.hyperparameters)
+{%- endif %}
+{%- endif %}
 
     logger.info(f"Training model {model}...")
     model.fit(X_train, Y_train)
@@ -368,24 +356,10 @@ def model_trainer(
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Train a model on the training set.
-{%- if sklearn_model_name == 'Logistic Regression' %}
-    model = LogisticRegression(random_state=42)
-{%- elif sklearn_model_name == 'SVC' %}
-    model = SVC(random_state=42)
-{%- elif sklearn_model_name == 'Linear SVC' %}
-    model = LinearSVC(random_state=42)
-{%- elif sklearn_model_name == 'Random Forest' %}
-    model = RandomForestClassifier(n_estimators=100)
-{%- elif sklearn_model_name == 'KNN' -%}
-    model = KNeighborsClassifier(n_neighbors = 3)
-{%- elif sklearn_model_name == 'Gaussian NB' %}
-    model = GaussianNB()
-{%- elif sklearn_model_name == 'Perceptron' %}
-    model = Perceptron(random_state=42)
-{%- elif sklearn_model_name == 'SGD Classifier' %}
-    model = SGDClassifier(random_state=42)
-{%- elif sklearn_model_name == 'Decision Tree' %}
-    model = DecisionTreeClassifier(random_state=42)
+{%- if not sklearn_model_name in [ 'KNeighborsClassifier', 'GaussianNB' ] %}
+    model = {{ sklearn_model_name }}(random_state=42)
+{%- else %}
+    model = {{ sklearn_model_name }}()
 {%- endif %}
     logger.info(f"Training model {model}...")
 
