@@ -7,16 +7,6 @@ template:
     choices:
         ZenML Starter: starter
     default: starter
-full_name:
-    type: str
-    help: >-
-        The name of the person/entity holding the copyright
-    default: ZenML GmbH
-email:
-    type: str
-    help: >-
-        The email of the person/entity holding the copyright
-    default: info@zenml.io
 project_name:
     type: str
     help: Short name for your project
@@ -44,6 +34,18 @@ open_source_license:
         GNU General Public License v3: gpl3
         Not open source: none
     default: apache
+full_name:
+    type: str
+    help: >-
+        The name of the person/entity holding the copyright
+    default: ZenML GmbH
+    when: "{{ open_source_license }}"
+email:
+    type: str
+    help: >-
+        The email of the person/entity holding the copyright
+    default: info@zenml.io
+    when: "{{ open_source_license }}"
 auto_format:
     type: bool
     help: >-
@@ -76,11 +78,9 @@ configurable_dataset:
 sklearn_dataset_name:
     type: str
     help: >-
-        {% if configurable_dataset %}
-        The default dataset to use if one is not explicitly selected at runtime.
-        {% else %}
-        The dataset you would like to use to train your model.
-        {% endif %}
+        The generated ZenML project will be populated with some example code
+        featuring one of the UCI ML datasets from scikit-learn.
+        Which dataset would you like to see being used in the generated code?
     choices:
         UCI Wine Data Set (classification): wine
         UCI Iris Data Set (classification): iris
@@ -98,12 +98,9 @@ configurable_model:
 sklearn_model_name:
     type: str
     help: >-
-        {% if configurable_model %}
-        The default model type to use if one is not explicitly selected at
-        runtime.
-        {% else %}
-        The type of model you would like to train.
-        {% endif %}
+        The generated ZenML project will be populated with some example code
+        featuring one of the scikit-learn classifier models.
+        Which model class would you like to see being used in the generated code?
     choices:
         Logistic Regression: LogisticRegression
         C-Support Vector Classification: SVC
