@@ -46,6 +46,12 @@ jobs:
         run: |
           pip install -r test-requirements.txt
 
+      # we neen to do this separately because zenml conflicts with latest copier
+      # on pydantic
+      - name: Upgrade copier
+        run: |
+          pip install --upgrade copier
+
       - name: Run pytests
         run: |
           pytest tests
