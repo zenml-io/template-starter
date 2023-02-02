@@ -23,7 +23,7 @@ from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
 {%- elif sklearn_model_name == 'RandomForestClassifier' %}
 from sklearn.ensemble import RandomForestClassifier
-{%- elif sklearn_model_name == 'KNeighborsClassifier' -%}
+{%- elif sklearn_model_name == 'KNeighborsClassifier' %}
 from sklearn.neighbors import KNeighborsClassifier
 {%- elif sklearn_model_name == 'GaussianNB' %}
 from sklearn.naive_bayes import GaussianNB
