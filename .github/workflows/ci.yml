@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: ["main", "develop"]
+    paths-ignore: ["README.md"]
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+    paths-ignore: ["README.md"]
+
+concurrency:
+  # New commit on branch cancels running workflows of the same branch
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test_templates:
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+        with:
+          requirement_files: 'test-requirements.txt'
+
+      - uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        with:
+          requirement_files: 'test-requirements-gcp.txt'
+          
+      - name: Install requirements
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        run: |
+          pip install -r test-requirements.txt
+
+      - name: Run pytests
+        run: |
+          pytest tests

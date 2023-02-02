@@ -1,0 +1,7 @@
+copier
+jinja2-time
+black
+ruff
+autoflake
+pytest
+zenml[server]>=0.32.1
