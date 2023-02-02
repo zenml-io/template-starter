@@ -1,5 +1,2 @@
-copier
-jinja2-time
-black
-ruff
-autoflake
+zenml[server]
+zenml[templates]

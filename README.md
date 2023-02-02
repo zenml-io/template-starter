@@ -14,31 +14,40 @@ message!
 
 ## 📦 Prerequisites
 
-To use the templates, you need to have [`copier`](https://copier.readthedocs.io/en/stable/)
-installed, along with some basic Jinja filters. You can install them by running:
+To use the templates, you need to have Zenml and its `templates` extras
+installed: 
 
 ```bash
-pip install copier jinja2-time
+pip install zenml[templates]
 ```
 
 ## 🚀 Generate a ZenML Project
 
-You can generate a project from one of the existing templates by running e.g.:
+You can generate a project from one of the existing templates by using the
+`--template` flag with the `zenml init` command:
 
 ```bash
-copier gh:zenml-io/zenml-project-templates .
+zenml init --template
+```
+
+Under the hood, ZenML uses the popular [Copier](https://copier.readthedocs.io/en/stable/)
+library and a set of Jinja2 templates to generate the project. So you may also
+interact with Copier directly to generate a project, e.g.:
+
+```bash
+copier gh:zenml-io/zenml-project-templates <directory>
 ```
 
 You will be prompted to select the project template and enter various values for
 the template variables. Once you have entered them, the project will be
-generated in a subdirectory.
+generated in the indicated path.
 
 To update an already generated project, with different parameters you can run
 the same command again. If you want to skip the prompts to use the values you
 already entered and overwrite all files in the existing project, you can run:
 
 ```bash
-copier -wf gh:zenml-io/zenml-project-templates .
+copier -wf gh:zenml-io/zenml-project-templates <directory>
 ```
 
 ## 📃 List of Project Templates

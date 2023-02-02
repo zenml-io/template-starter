@@ -47,43 +47,7 @@ other ML framework.
 | Runtime Configurable Dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
 | Runtime Configurable Model | Whether to make the model a configurable parameter of the model trainer step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
 
-
-## 📦 Prerequisites
-
-To use the templates, you need to have [`copier`](https://copier.readthedocs.io/en/stable/)
-installed, along with some basic Jinja filters. You can install them by running:
-
-```bash
-pip install copier jinja2-time
-```
-
-If you also want to cleanup and format the generated project code, to avoid
-any code style issues that might be left behind by the code generation
-process (recommended), you will need to install the following additional
-dependencies:
-
-```bash
-pip install black ruff autoflake
-```
-
-You can enable the automatic cleanup and formatting by enabling the
-auto-formatting option when prompted by the template generator..
-
 ## 🚀 Generate a ZenML Project
 
-You can generate a project from this templates by running:
-
-```bash
-copier gh:zenml-io/zenml-project-templates .
-```
-
-You will be prompted to enter various values for the template variables. Once
-you have entered them, the project will be generated in a subdirectory.
-
-To update an already generated project, with different parameters you can run
-the same command again. If you want to skip the prompts to use the values you
-already entered and overwrite all files in the existing project, you can run:
-
-```bash
-copier -wf gh:zenml-io/zenml-project-templates .
-```
+Please see [the main README page](../README.md) for instructions on how to
+generate a ZenML project from this template.
