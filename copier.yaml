@@ -106,7 +106,7 @@ sklearn_model_name:
         C-Support Vector Classification: SVC
         Linear Support Vector Classification: LinearSVC
         Random Forest Classifier: RandomForestClassifier
-        K-Nearest Neighbors Classifier: KNN
+        K-Nearest Neighbors Classifier: KNeighborsClassifier
         Gaussian Naive Bayes: GaussianNB
         Linear Perceptron Classifier: Perceptron
         Stochastic Gradient Descent Linear Classifier: SGDClassifier

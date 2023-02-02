@@ -161,7 +161,7 @@ def test_step_params_disabled(
     "sklearn_model_name",
     [
         "RandomForestClassifier",
-        "KNN",
+        "KNeighborsClassifier",
     ],
 )
 def test_step_params_enabled(
