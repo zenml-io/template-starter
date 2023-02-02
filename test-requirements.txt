@@ -5,3 +5,4 @@ ruff
 autoflake
 pytest
 zenml[server]>=0.32.1
+scikit-learn
