@@ -1,0 +1,10 @@
+Congratulations, your project has been generated in the `{{ _copier_conf.dst_path }}` directory.
+You can now run the following commands to get started:
+
+    cd {{ _copier_conf.dst_path }}
+    pip install -r requirements.txt
+    zenml up
+    python run.py
+
+Next, you should take a look at the `{{ _copier_conf.dst_path }}/README.md` file in the generated project.
+Happy coding!

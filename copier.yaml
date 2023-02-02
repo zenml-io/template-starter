@@ -11,12 +11,6 @@ project_name:
     type: str
     help: Short name for your project
     default: ZenML Starter
-project_slug:
-    type: str
-    help: >-
-        A slugified version of the project name (automatically generated from
-        the project name)
-    default: "{{ project_name.lower().replace(' ', '_').replace('-', '_') }}"
 version:
     type: str
     help: |
@@ -116,7 +110,7 @@ sklearn_model_name:
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""
-_subdirectory: "{{ template }}"
+_subdirectory: "{{ template }}/template"
 _exclude:
     - /README.md
 _tasks:
@@ -126,17 +120,17 @@ _tasks:
             --remove-unused-variables \
             --in-place \
             --exclude=__init__.py \
-            {{ project_slug }} > /dev/null 2>&1 || true
+            . > /dev/null 2>&1 || true
     - |
         {{ _copier_python }} -m ruff --select I \
             --fix --ignore D \
-            {{ project_slug }} > /dev/null 2>&1 || true
+            . > /dev/null 2>&1 || true
     - |
         {{ _copier_python }} -m black \
             --exclude '' --include '\.pyi?$' -l 79 \
-            {{ project_slug }} > /dev/null 2>&1 || true
+            . > /dev/null 2>&1 || true
     - |
-        cat {{ project_slug }}/WELCOME.txt && rm {{ project_slug }}/WELCOME.txt
+        cat WELCOME.txt && rm WELCOME.txt
 
 _jinja_extensions:
     - jinja2_time.TimeExtension

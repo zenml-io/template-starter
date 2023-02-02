@@ -44,7 +44,6 @@ def generate_and_run_project(
     answers = {
         "template": "starter",
         "project_name": "Pytest Starter",
-        "project_slug": "pytest_starter",
         "version": "0.0.1",
         "open_source_license": open_source_license,
         "email": "pytest@zenml.io",
@@ -59,8 +58,9 @@ def generate_and_run_project(
     }
 
     # generate the template in a temp path
-    dst_path = tmp_path_factory.mktemp("pytest-template")
     current_dir = os.getcwd()
+    dst_path = tmp_path_factory.mktemp("pytest-template")
+    os.chdir(str(dst_path))
     with Worker(
         src_path=TEMPLATE_DIRECTORY,
         dst_path=str(dst_path),
@@ -69,14 +69,12 @@ def generate_and_run_project(
         worker.run_copy()
 
     # run the project
-    run_path = dst_path / "pytest_starter"
-    os.chdir(str(run_path))
     call = [sys.executable, "run.py"]
 
     try:
         subprocess.check_call(
             call,
-            cwd=str(run_path),
+            cwd=str(dst_path),
             env=os.environ.copy(),
         )
     except Exception as e:
