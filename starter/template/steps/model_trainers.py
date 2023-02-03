@@ -34,6 +34,10 @@ from sklearn.linear_model import SGDClassifier
 {%- elif sklearn_model_name == 'DecisionTreeClassifier' %}
 from sklearn.tree import DecisionTreeClassifier
 {%- endif %}
+{% if use_custom_artifacts %}
+from artifacts import ModelMetadata
+from materializers import ModelMetadataMaterializer
+{%- endif %}
 
 {%- if use_step_params %}
 from zenml.enums import StrEnum
@@ -237,22 +241,38 @@ class ModelEvaluatorStepParameters(BaseParameters):
 
 
 @step
+{%- if use_custom_artifacts -%}
+(output_materializers=ModelMetadataMaterializer)
+{%- endif %}
 def model_evaluator(
     params: ModelEvaluatorStepParameters,
     model: ClassifierMixin,
     train_set: pd.DataFrame,
     test_set: pd.DataFrame,
+{%- if use_custom_artifacts %}
+) -> ModelMetadata:
+{%- else %}
 ) -> Output(
     train_accuracy=float,
     test_accuracy=float,
 ):
+{%- endif %}
     """Evaluate a trained model.
     
     This is an example of a model evaluation step that takes in a model artifact
     previously trained by another step in your pipeline, and a training
     and validation data set pair which it uses to evaluate the model's
+{%- if use_custom_artifacts %}
+    performance. The step returns a custom type of artifact containing metadata
+    about the trained model. Note that using a custom data type also requires
+    implementing a custom materializer for it. See the `materializer` folder
+    or the following ZenML docs for more information about materializers:
+
+        https://docs.zenml.io/advanced-guide/pipelines/materializers
+{%- else %}
     performance. The model metrics are then returned as step output artifacts
     (in this case, the model accuracy on the train and test set).
+{%- endif %}
 
     The suggested step implementation also outputs some warnings if the model
     performance does not meet some minimum criteria. This is just an example of
@@ -278,7 +298,11 @@ def model_evaluator(
         test_set: The test data set artifact.
 
     Returns:
+{%- if use_custom_artifacts %}
+        A model metadata artifact.
+{%- else %}
         The model accuracy on the train and test set.
+{%- endif %}
     """
     X_train = train_set.drop("target", axis=1)
     Y_train = train_set["target"]
@@ -316,9 +340,19 @@ def model_evaluator(
     else:
         for message in messages:
             logger.warning(message)
+{% if use_custom_artifacts %}
+    model_metadata = ModelMetadata()
+    model_metadata.collect_metadata(
+        model = model,
+        train_accuracy = train_acc,
+        test_accuracy = test_acc,
+    )
+    return model_metadata
+{%- else %}
+    return train_acc, test_acc
+{%- endif %}
     ### YOUR CODE ENDS HERE ###
 
-    return train_acc, test_acc
 {% else %}
 @step
 def model_trainer(
@@ -370,21 +404,37 @@ def model_trainer(
 
 
 @step
+{%- if use_custom_artifacts -%}
+(output_materializers=ModelMetadataMaterializer)
+{%- endif %}
 def model_evaluator(
     model: ClassifierMixin,
     train_set: pd.DataFrame,
     test_set: pd.DataFrame,
+{%- if use_custom_artifacts %}
+) -> ModelMetadata:
+{%- else %}
 ) -> Output(
     train_accuracy=float,
     test_accuracy=float,
 ):
+{%- endif %}
     """Evaluate a trained model.
     
     This is an example of a model evaluation step that takes in a model artifact
     previously trained by another step in your pipeline, and a training
     and validation data set pair which it uses to evaluate the model's
+{%- if use_custom_artifacts %}
+    performance. The step returns a custom type of artifact containing metadata
+    about the trained model. Note that using a custom data type also requires
+    implementing a custom materializer for it. See the `materializer` folder
+    or the following ZenML docs for more information about materializers:
+
+        https://docs.zenml.io/advanced-guide/pipelines/materializers
+{%- else %}
     performance. The model metrics are then returned as step output artifacts
     (in this case, the model accuracy on the train and test set).
+{%- endif %}
 
     The suggested step implementation also outputs some warnings if the model
     performance does not meet some minimum criteria. This is just an example of
@@ -406,7 +456,11 @@ def model_evaluator(
         test_set: The test data set artifact.
 
     Returns:
+{%- if use_custom_artifacts %}
+        A model metadata artifact.
+{%- else %}
         The model accuracy on the train and test set.
+{%- endif %}
     """
     X_train = train_set.drop("target", axis=1)
     Y_train = train_set["target"]
@@ -429,7 +483,17 @@ def model_evaluator(
             "Train accuracy is more than 10% higher than test accuracy. The "
             "model is overfitting the training dataset."
         )
+{%- if use_custom_artifacts %}
+    model_metadata = ModelMetadata()
+    model_metadata.collect_metadata(
+        model = model,
+        train_accuracy = train_acc,
+        test_accuracy = test_acc,
+    )
+    return model_metadata
+{%- else %}
+    return train_acc, test_acc
+{%- endif %}
     ### YOUR CODE ENDS HERE ###
 
-    return train_acc, test_acc
 {%- endif %}
