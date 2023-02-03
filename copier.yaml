@@ -120,15 +120,15 @@ _tasks:
             --remove-unused-variables \
             --in-place \
             --exclude=__init__.py \
-            . > /dev/null 2>&1 || true
+            steps pipelines run.py > /dev/null 2>&1 || true
     - |
         {{ _copier_python }} -m ruff --select I \
             --fix --ignore D \
-            . > /dev/null 2>&1 || true
+            steps pipelines run.py > /dev/null 2>&1 || true
     - |
         {{ _copier_python }} -m black \
             --exclude '' --include '\.pyi?$' -l 79 \
-            . > /dev/null 2>&1 || true
+            steps pipelines run.py > /dev/null 2>&1 || true
     - |
         cat WELCOME.txt && rm WELCOME.txt
 
