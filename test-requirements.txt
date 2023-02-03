@@ -1,3 +1,4 @@
 zenml[server]
 zenml[templates]
 scikit-learn
+pytest
