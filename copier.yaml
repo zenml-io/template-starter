@@ -115,17 +115,17 @@ _exclude:
     - /README.md
 _tasks:
     - |
-        {{ _copier_python }} -m autoflake --remove-all-unused-imports \
-            --recursive \
-            --remove-unused-variables \
-            --in-place \
-            --exclude=__init__.py \
+        # Remove unused imports and variables
+        {{ _copier_python }} --select F401,F841 --fix \
+            --exclude "__init__.py" --isolated \
             steps pipelines run.py > /dev/null 2>&1 || true
     - |
+        # Sort imports
         {{ _copier_python }} -m ruff --select I \
             --fix --ignore D \
             steps pipelines run.py > /dev/null 2>&1 || true
     - |
+        # Auto-format code
         {{ _copier_python }} -m black \
             --exclude '' --include '\.pyi?$' -l 79 \
             steps pipelines run.py > /dev/null 2>&1 || true
