@@ -40,12 +40,12 @@ other ML framework.
 | Project Version | The version of your project | 0.1.0 |
 | Project License | The license under which your project will be released (one of `Apache Software License 2.0`, `MIT license`, `BSD license`, `ISC license`, `GNU General Public License v3` and `Not open source`) | Apache Software License 2.0 |
 | Auto-Format | Whether to automatically format and cleanup the generated code with [black](https://black.readthedocs.io/), [ruff](https://beta.ruff.rs/docs/) and [autoflake](https://github.com/PyCQA/autoflake) (yes/no). You also need to have these Python packages installed for this option to take effect. | no |
-| Use ZenML Step Params | Whether to showcase using parameters for the ZenML steps in the project (yes/no). If selected, all generated ZenML pipeline steps will be parameterized. | no |
-| Use ZenML Materializers | Whether to showcase using custom data types for the ZenML artifacts in the project (yes/no). If selected, the generated code will demonstrate the use of custom artifact data types and materializers in the generated steps and pipelines. | no |
+| Use ZenML Step Params | Whether to showcase using parameters for the ZenML steps in the project (yes/no). If selected, all generated ZenML pipeline steps will be parameterized. | yes |
+| Use ZenML Materializers | Whether to showcase using custom data types for the ZenML artifacts in the project (yes/no). If selected, the generated code will demonstrate the use of custom artifact data types and materializers in the generated steps and pipelines. | yes |
 | UCI Dataset | The name of the UCI provided scikit-learn dataset to use in the project (one of `Iris`, `Breast Cancer` and `Wine`) | Wine |
 | Scikit-learn Model | The name of the scikit-learn classifier model to use in the project (one of `Logistic Regression`, `SVC`, `Linear SVC`, `Random Forest`, `KNN`, `Gaussian NB`, `Perceptron`, `SGD Classifier` and `Decision Tree`) | Logistic Regression |
-| Runtime Configurable Dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
-| Runtime Configurable Model | Whether to make the model a configurable parameter of the model trainer step and CLI (yes/no). Only has effect if the step parameters were also selected. | no |
+| Runtime Configurable Dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (yes/no). Only has effect if the step parameters were also selected. | yes |
+| Runtime Configurable Model | Whether to make the model a configurable parameter of the model trainer step and CLI (yes/no). Only has effect if the step parameters were also selected. | yes |
 
 ## 🚀 Generate a ZenML Project
 
