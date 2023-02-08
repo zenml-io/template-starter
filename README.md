@@ -4,7 +4,7 @@ This repository contains a collection of templates from which a ZenML project
 can be generated: a collection of steps, pipelines, stack configurations and
 other artifacts and useful resources that can get you started with ZenML.
 
-🔥 **Do you have a personal project powered by ZenML that you would like to see here ?** At
+🔥 **Do you have a personal project powered by ZenML that you would like to see here?** At
 ZenML, we are looking for design partnerships and collaboration to help us
 better understand the real-world scenarios in which MLOps is being used and to
 build the best possible experience for our users. If you are interested in
