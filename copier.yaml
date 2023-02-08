@@ -49,17 +49,17 @@ auto_format:
 use_step_params:
     type: bool
     help: "Would you like to see step parameters being used in the generated \n   ZenML steps?"
-    default: false
+    default: true
     when: "{{ template == 'starter' }}"
 use_custom_artifacts:
     type: bool
     help: "Would you like to see custom artifact data types and materializers \n   being used in the generated ZenML steps and pipelines?"
-    default: false
+    default: true
     when: "{{ template == 'starter' }}"
 configurable_dataset:
     type: bool
     help: "Would you like to be able to select the dataset used in model training\n   at runtime through the CLI and as a data loader step parameter?"
-    default: false
+    default: true
     when: "{{ template == 'starter' and use_step_params }}"
 sklearn_dataset_name:
     type: str
@@ -77,7 +77,12 @@ configurable_model:
     help: "Would you like to be able to select the type of model used in model \n
     training at runtime through the CLI and as a model trainer step \n
     parameter?"
-    default: false
+    default: true
+    help: >-
+        Would you like to be able to select the type of model used in model
+        training at runtime through the CLI and as a model trainer step
+        parameter ?
+    default: true
     when: "{{ template == 'starter' and use_step_params }}"
 sklearn_model_name:
     type: str
