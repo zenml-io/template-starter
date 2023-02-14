@@ -43,7 +43,7 @@ class ModelMetadataMaterializer(BaseMaterializer):
     # This needs to point to the artifact data type(s) associated with the
     # materializer 
     ASSOCIATED_TYPES = (ModelMetadata,)
-    ASSOCIATED_ARTIFACT_TYPE = ArtifactType.DATA
+    ASSOCIATED_ARTIFACT_TYPE = ArtifactType.STATISTICS
 
     def save(self, model_metadata: ModelMetadata) -> None:
         """Save (de-materialize) a model metadata artifact to the artifact store.
