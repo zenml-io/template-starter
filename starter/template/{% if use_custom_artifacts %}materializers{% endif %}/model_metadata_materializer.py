@@ -10,6 +10,7 @@ from zenml.enums import ArtifactType
 from zenml.io import fileio
 from zenml.materializers.base_materializer import BaseMaterializer
 
+
 class ModelMetadataMaterializer(BaseMaterializer):
     """Custom materializer for the `ModelMetadata` artifact data type.
 
