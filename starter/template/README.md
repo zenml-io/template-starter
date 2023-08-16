@@ -98,7 +98,7 @@ to indicate where you can add your own code:
 
 ## 📜 Project Structure
 
-The project loosely follows [the recommended ZenML project structure](https://docs.zenml.io/guidelines/best-practices#recommended-repository-structure):
+The project loosely follows [the recommended ZenML project structure](https://docs.zenml.io/user-guide/starter-guide/follow-best-practices):
 
 ```
 ├── pipelines                   <- All pipelines in one place

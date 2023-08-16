@@ -134,7 +134,7 @@ def model_trainer(
     constructor. See the documentation for more information:
 {%- endif %}
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         params: The parameters for the model trainer step.
@@ -268,7 +268,7 @@ def model_evaluator(
     implementing a custom materializer for it. See the `materializer` folder
     or the following ZenML docs for more information about materializers:
 
-        https://docs.zenml.io/advanced-guide/pipelines/materializers
+        https://docs.zenml.io/user-guide/advanced-guide/artifact-management/handle-custom-data-types
 {%- else %}
     performance. The model metrics are then returned as step output artifacts
     (in this case, the model accuracy on the train and test set).
@@ -289,7 +289,7 @@ def model_evaluator(
     does not meet the minimum criteria. See the documentation for more
     information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         params: The parameters for the model evaluator step.
@@ -377,7 +377,7 @@ def model_trainer(
     hard-coding them in the step implementation. See the documentation for more
     information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         train_set: The training data set artifact.
@@ -430,7 +430,7 @@ def model_evaluator(
     implementing a custom materializer for it. See the `materializer` folder
     or the following ZenML docs for more information about materializers:
 
-        https://docs.zenml.io/advanced-guide/pipelines/materializers
+        https://docs.zenml.io/user-guide/advanced-guide/artifact-management/handle-custom-data-types
 {%- else %}
     performance. The model metrics are then returned as step output artifacts
     (in this case, the model accuracy on the train and test set).
@@ -448,7 +448,7 @@ def model_evaluator(
     make your model evaluation steps more flexible. See the documentation for
     more information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         model: The pre-trained model artifact.
