@@ -65,6 +65,7 @@ def generate_and_run_project(
         src_path=TEMPLATE_DIRECTORY,
         dst_path=str(dst_path),
         data=answers,
+        unsafe=True,
     ) as worker:
         worker.run_copy()
 

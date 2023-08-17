@@ -10,15 +10,15 @@ This project template is a good starting point for anyone starting out with
 ZenML. It showcases the following fundamental ZenML concepts in a relatable
 ML context:
 
-* designing [ZenML pipeline steps](https://docs.zenml.io/starter-guide/pipelines#step)
+* designing [ZenML pipeline steps](https://docs.zenml.io/user-guide/starter-guide#pipelines-and-steps)
 in general, but also particularly useful for the following applications:
     * data ingestion, data transformation and data train/test splitting
     * model training and evaluation
-* using [step parameterization and caching](https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching)
+* using [step parameterization and caching](https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions)
 to design flexible and reusable steps
-* using [custom data types for your artifacts and writing materializers for them](https://docs.zenml.io/advanced-guide/pipelines/materializers)
-* constructing and running a [ZenML pipeline](https://docs.zenml.io/starter-guide/pipelines#pipeline)
-* accessing ZenML pipeline run artifacts in [the post-execution phase](https://docs.zenml.io/starter-guide/pipelines/fetching-pipelines),
+* using [custom data types for your artifacts and writing materializers for them](https://docs.zenml.io/user-guide/advanced-guide/artifact-management/handle-custom-data-types)
+* constructing and running a [ZenML pipeline](https://docs.zenml.io/user-guide/starter-guide#pipelines-and-steps)
+* accessing ZenML pipeline run artifacts in [the post-execution phase](https://docs.zenml.io/user-guide/starter-guide/fetch-runs-after-execution),
 after a pipeline run has concluded
 * best practices for implementing and running reproducible and reliable ML
 pipelines with ZenML

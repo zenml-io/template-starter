@@ -37,7 +37,7 @@ class ModelMetadataMaterializer(BaseMaterializer):
     More information about custom step artifact data types and ZenML
     materializers is available in the docs:
 
-      https://docs.zenml.io/advanced-guide/pipelines/materializers
+      https://docs.zenml.io/user-guide/advanced-guide/artifact-management/handle-custom-data-types
     
     """
 

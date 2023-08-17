@@ -72,7 +72,7 @@ def data_loader(
     
     This is an example of a data loader step that is usually the first step
     in your pipeline. It reads data from an external source like a file,
-    database or 3rd party library, then formats it and returns it as an step
+    database or 3rd party library, then formats it and returns it as a step
     output artifact.
 
     This step is parameterized using the `DataLoaderStepParameters` class, which
@@ -81,7 +81,7 @@ def data_loader(
     load different built-in scikit-learn datasets. See the documentation for
     more information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Data loader steps should have caching disabled if they are not deterministic
     (i.e. if they data they load from the external source can be different when
@@ -130,7 +130,7 @@ def data_loader() -> Output(
     your data loader deterministic and configurable without the need to change
     the step implementation. See the documentation for more information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Returns:
         The loaded dataset artifact.
@@ -189,7 +189,7 @@ def data_processor(
     it is suitable for model training. It takes in a dataset as an input step
     artifact and performs any necessary preprocessing steps like cleaning,
     feature engineering, feature selection, etc. It then returns the processed
-    dataset as an step output artifact.
+    dataset as a step output artifact.
     
     This step is parameterized using the `DataProcessorStepParameters` class,
     which allows you to configure the step independently of the step code,
@@ -198,7 +198,7 @@ def data_processor(
     missing values, dropping columns, normalizing the data, etc.). See the
     documentation for more information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         params: Parameters for the data processor step.
@@ -287,7 +287,7 @@ def data_splitter(
     to shuffle or stratify the split. See the documentation for more
     information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         params: Parameters for the data splitter step.
@@ -347,7 +347,7 @@ def data_splitter(dataset: pd.DataFrame) -> Output(
     
     This is an example of a data splitter step that splits the dataset into
     training and dev subsets to be used for model training and evaluation. It
-    takes in a dataset as an step input artifact and returns the training and
+    takes in a dataset as a step input artifact and returns the training and
     dev subsets as two separate step output artifacts.
 
     Data splitter steps should have a deterministic behavior, i.e. they should
@@ -359,7 +359,7 @@ def data_splitter(dataset: pd.DataFrame) -> Output(
     the random seed as a step parameter to make your data loader deterministic.
     See the documentation for more information:
 
-        https://docs.zenml.io/starter-guide/pipelines/parameters-and-caching 
+        https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
         dataset: The dataset to split.
