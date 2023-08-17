@@ -16,8 +16,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test_templates:
-    runs-on: ubuntu-latest
+  run-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        stack-name: [local]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
     env:
       ZENML_DEBUG: true
       ZENML_ANALYTICS_OPT_IN: false
@@ -26,32 +31,8 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Run tests
+        uses: ./.github/actions/starter_template_test
         with:
-          python-version: '3.9'
-
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-        with:
-          requirement_files: 'test-requirements.txt'
-
-      - uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        with:
-          requirement_files: 'test-requirements.txt'
-          
-      - name: Install requirements
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        run: |
-          pip install -r test-requirements.txt
-
-      # we neen to do this separately because zenml conflicts with latest copier
-      # on pydantic
-      - name: Upgrade copier
-        run: |
-          pip install --upgrade copier
-
-      - name: Run pytests
-        run: |
-          pytest tests
+          stack-name: ${{ matrix.stack-name }}
+          python-version: ${{ matrix.python-version }}
