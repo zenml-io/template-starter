@@ -107,23 +107,46 @@ _subdirectory: "{{ template }}/template"
 _exclude:
     - /README.md
 _tasks:
+    # Remove unused imports and variables
+    - >-
+      {% if _copier_conf.os == 'windows' %}
+      echo "Auto-formatting not supported on Windows"
+      {% else  %}
+      {{ _copier_python }} -m ruff --select F401,F841 --fix \
+          --exclude "__init__.py" --isolated \
+          steps pipelines run.py > /dev/null 2>&1 || true
+      {% endif %}
+    # Sort imports
+    - >-
+      {% if _copier_conf.os == 'windows' %}
+      echo "Auto-formatting not supported on Windows"
+      {% else  %}
+      {{ _copier_python }} -m ruff --select I \
+          --fix --ignore D \
+          steps pipelines run.py > /dev/null 2>&1 || true
+      {% endif %}
+    # Auto-format code
+    - >-
+      {% if _copier_conf.os == 'windows' %}
+      echo "Auto-formatting not supported on Windows"
+      {% else  %}
+      {{ _copier_python }} -m black \
+          --exclude '' --include '\.pyi?$' -l 79 \
+          steps pipelines run.py > /dev/null 2>&1 || true
+      {% endif %}
     - |
-        # Remove unused imports and variables
-        {{ _copier_python }} --select F401,F841 --fix \
-            --exclude "__init__.py" --isolated \
-            steps pipelines run.py > /dev/null 2>&1 || true
-    - |
-        # Sort imports
-        {{ _copier_python }} -m ruff --select I \
-            --fix --ignore D \
-            steps pipelines run.py > /dev/null 2>&1 || true
-    - |
-        # Auto-format code
-        {{ _copier_python }} -m black \
-            --exclude '' --include '\.pyi?$' -l 79 \
-            steps pipelines run.py > /dev/null 2>&1 || true
-    - |
-        cat WELCOME.txt && rm WELCOME.txt
+      echo "Congratulations, your project has been generated in the '{{ _copier_conf.dst_path }}' directory."
+      echo "You can now run the following commands to get started:"
+      echo "   cd {{ _copier_conf.dst_path }}"
+      echo "   make setup"
+      echo "   # optional, provision default local stack"
+      echo "   make install-stack"
+      echo "   # optional, start ZenML Dashboard"
+      echo "   zenml up"
+      echo "   python run.py"
+      echo 
+      echo "Next, you should take a look at the '{{ _copier_conf.dst_path }}/README.md' file in the generated project."
+      echo "Happy coding!"
 
 _jinja_extensions:
     - jinja2_time.TimeExtension
