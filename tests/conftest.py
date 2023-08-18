@@ -1,11 +1,49 @@
+#  Copyright (c) ZenML GmbH 2023. All Rights Reserved.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at:
+#
+#       https://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+#  or implied. See the License for the specific language governing
+#  permissions and limitations under the License.
+
+
 import os
 import shutil
 from typing import Generator
-import pytest
 
+import pytest
 from zenml.client import Client
 from zenml.config.global_config import GlobalConfiguration
 from zenml.constants import ENV_ZENML_CONFIG_PATH
+from zenml.enums import StackComponentType
+
+
+def configure_stack():
+    stack_name = os.environ.get("ZENML_STACK_NAME", "local")
+    zenml_client = Client()
+
+    if stack_name == "local":
+        components = {}
+        for component in [
+            ("mlflow_local", "mlflow", StackComponentType.EXPERIMENT_TRACKER),
+            ("mlflow_local", "mlflow", StackComponentType.MODEL_REGISTRY),
+            ("mlflow_local", "mlflow", StackComponentType.MODEL_DEPLOYER),
+            ("evidently", "evidently", StackComponentType.DATA_VALIDATOR),
+            ("local", "local", StackComponentType.ORCHESTRATOR),
+            ("local", "local", StackComponentType.ARTIFACT_STORE),
+        ]:
+            zenml_client.create_stack_component(*component, {})
+            components[component[2]] = component[0]
+        zenml_client.create_stack("local", components=components)
+        zenml_client.activate_stack("local")
+    else:
+        raise RuntimeError(f"Stack {stack_name} not supported")
 
 
 @pytest.fixture(scope="module")
@@ -45,6 +83,9 @@ def clean_zenml_client(
     gc.analytics_opt_in = False
     client = Client()
     _ = client.zen_store
+
+    # prepare stack configuration
+    configure_stack()
 
     yield client
 

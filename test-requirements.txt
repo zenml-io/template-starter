@@ -1,4 +1,6 @@
-zenml[server]
-zenml[templates]
-scikit-learn
+autopep8
 pytest
+pytest-randomly
+ruff
+black
+isort

@@ -45,7 +45,7 @@ def generate_and_run_project(
         "template": "starter",
         "project_name": "Pytest Starter",
         "version": "0.0.1",
-        "open_source_license": open_source_license,
+        "open_source_license": str(open_source_license).lower(),
         "email": "pytest@zenml.io",
         "full_name": "Pytest",
         "auto_format": auto_format,

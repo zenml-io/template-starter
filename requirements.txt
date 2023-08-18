@@ -1,2 +1,3 @@
-zenml[server]
-zenml[templates]
+scikit-learn
+copier
+jinja2-time
