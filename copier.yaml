@@ -137,14 +137,12 @@ _tasks:
     - |
       echo "Congratulations, your project has been generated in the '{{ _copier_conf.dst_path }}' directory."
       echo "You can now run the following commands to get started:"
-      echo "   cd {{ _copier_conf.dst_path }}"
-      echo "   make setup"
-      echo "   # optional, provision default local stack"
-      echo "   make install-stack"
-      echo "   # optional, start ZenML Dashboard"
-      echo "   zenml up"
-      echo "   python run.py"
-      echo 
+      echo "    cd {{ _copier_conf.dst_path }}"
+      echo "    pip install -r requirements.txt"
+      echo "    # Start the ZenML UI (optional; you'll also need the zenml[server] Python"
+      echo "    # package installed"
+      echo "    zenml up"
+      echo "    python run.py"
       echo "Next, you should take a look at the '{{ _copier_conf.dst_path }}/README.md' file in the generated project."
       echo "Happy coding!"
 
