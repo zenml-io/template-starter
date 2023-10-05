@@ -1,3 +1,5 @@
+# THIS REPOSITORY WILL BE DEPRECATED AFTER 01/10/2023. 
+
 # 📜 ZenML Project Templates
 
 This repository contains a collection of templates from which a ZenML project
