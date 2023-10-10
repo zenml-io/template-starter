@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 {%- if use_step_params %}
 from zenml.enums import StrEnum
 {%- endif %}
-from zenml.steps import (
+from zenml import (
 {%- if use_step_params %}
     BaseParameters,
 {%- endif %}
@@ -35,38 +35,10 @@ class SklearnDataset(StrEnum):
     iris = "iris"
     breast_cancer = "breast_cancer"
 
-class DataLoaderStepParameters(BaseParameters):
-    """Parameters for the data loader step.
-
-    This is an example of how to use step parameters to make your data loader
-    step configurable independently of the step code. This is useful for example
-    if you want to load different datasets or different versions of the same
-    dataset in your pipeline without having to change the step code.
-    """
-
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # The name of the built-in scikit-learn dataset to load.
-    dataset: SklearnDataset = SklearnDataset.{{ sklearn_dataset_name }}
-    ### YOUR CODE ENDS HERE ###
-
-    class Config:
-        """Pydantic config class.
-        
-        This is used to configure the behavior of Pydantic, the library used to
-        parse and validate step parameters. See the documentation for more
-        information:
-
-            https://pydantic-docs.helpmanual.io/usage/model_config/
-
-        It is recommended to explicitly forbid extra parameters here to ensure
-        that the step parameters are always valid.
-        """
-        extra = "forbid"
-
 
 @step
 def data_loader(
-    params: DataLoaderStepParameters,
+    dataset_name: SklearnDataset = SklearnDataset.{{ sklearn_dataset_name }},
 ) -> pd.DataFrame:
     """Data loader step.
     
@@ -89,7 +61,7 @@ def data_loader(
     don't change).
 
     Args:
-        params: Parameters for the data loader step.
+        dataset_name: SklearnDataset enum, one of "wine", "iris", or "breast_cancer".
     
     Returns:
         The loaded dataset artifact.
@@ -97,15 +69,15 @@ def data_loader(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Load the dataset indicated in the step parameters and format it as a
     # pandas DataFrame
-    if params.dataset == SklearnDataset.wine:
+    if dataset_name == SklearnDataset.wine:
         dataset = load_wine(as_frame=True).frame
-    elif params.dataset == SklearnDataset.iris:
+    elif dataset_name == SklearnDataset.iris:
         dataset = load_iris(as_frame=True).frame
-    elif params.dataset == SklearnDataset.breast_cancer:
+    elif dataset_name == SklearnDataset.breast_cancer:
         dataset = load_breast_cancer(as_frame=True).frame
-    elif params.dataset == SklearnDataset.diabetes:
+    elif dataset_name == SklearnDataset.diabetes:
         dataset = load_diabetes(as_frame=True).frame
-    logger.info(f"Loaded dataset {params.dataset.value}: %s", dataset.info())
+    logger.info(f"Loaded dataset {dataset.value}: %s", dataset.info())
     logger.info(dataset.head())
     ### YOUR CODE ENDS HERE ###
 
@@ -145,42 +117,15 @@ def data_loader() -> Output(
     return dataset
 {% endif %}
 {% if use_step_params %}
-class DataProcessorStepParameters(BaseParameters):
-    """Parameters for the data processor step.
-
-    This is an example of how to use step parameters to make your data processor
-    step configurable independently of the step code. This is useful for example
-    if you want to change the way your process data in your pipeline without
-    having to change the step code.
-    """
-
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Whether to drop rows with missing values.
-    drop_na: bool = True
-    # Columns to drop from the dataset.
-    drop_columns: List[str] = []
-    # Whether to normalize the data.
-    normalize: bool = True
-    ### YOUR CODE ENDS HERE ###
-
-    class Config:
-        """Pydantic config class.
-        
-        This is used to configure the behavior of Pydantic, the library used to
-        parse and validate step parameters. See the documentation for more
-        information:
-
-            https://pydantic-docs.helpmanual.io/usage/model_config/
-
-        It is recommended to explicitly forbid extra parameters here to ensure
-        that the step parameters are always valid.
-        """
-        extra = "forbid"
-
 
 @step
 def data_processor(
-    params: DataProcessorStepParameters,
+    # Whether to drop rows with missing values.
+    drop_na: bool = True,
+    # Columns to drop from the dataset.
+    drop_columns: List[str] = [],
+    # Whether to normalize the data.
+    normalize: bool = True,
     dataset: pd.DataFrame,
 ) -> pd.DataFrame:
     """Data processor step.
@@ -208,13 +153,13 @@ def data_processor(
         The processed dataset artifact.
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    if params.drop_na:
+    if drop_na:
         # Drop rows with missing values
         dataset = dataset.dropna()
-    if params.drop_columns:
+    if drop_columns:
         # Drop columns
-        dataset = dataset.drop(columns=params.drop_columns)
-    if params.normalize:
+        dataset = dataset.drop(columns=drop_columns)
+    if normalize:
         # Normalize the data
         target = dataset.pop('target')
         dataset = (dataset - dataset.mean()) / dataset.std()
@@ -223,46 +168,16 @@ def data_processor(
 
     return dataset
 
-
-class DataSplitterStepParameters(BaseParameters):
-    """Parameters for the data splitter step.
-
-    This is an example of how to use step parameters to make your data splitter
-    step configurable independently of the step code. This is useful for example
-    if you want to change the ratio for the data split or if you want to
-    control the random seed used for the split without having to change the step
-    code.
-    """
-
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # The proportion of the dataset to include in the test split.
-    test_size: float = 0.2
-    # The random seed to use for the split.
-    random_state: int = 42
-    # Whether to shuffle the dataset before splitting.
-    shuffle: bool = True
-    # Whether to stratify the split.
-    stratify: bool = True
-    ### YOUR CODE ENDS HERE ###
-
-    class Config:
-        """Pydantic config class.
-        
-        This is used to configure the behavior of Pydantic, the library used to
-        parse and validate step parameters. See the documentation for more
-        information:
-
-            https://pydantic-docs.helpmanual.io/usage/model_config/
-
-        It is recommended to explicitly forbid extra parameters here to ensure
-        that the step parameters are always valid.
-        """
-        extra = "forbid"
-
-
 @step
 def data_splitter(
-    params: DataSplitterStepParameters,
+    # The proportion of the dataset to include in the test split.
+    test_size: float = 0.2,
+    # The random seed to use for the split.
+    random_state: int = 42,
+    # Whether to shuffle the dataset before splitting.
+    shuffle: bool = True,
+    # Whether to stratify the split.
+    stratify: bool = True,
     dataset: pd.DataFrame,
 ) -> Output(
     train_set=pd.DataFrame,
@@ -290,7 +205,10 @@ def data_splitter(
         https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions
 
     Args:
-        params: Parameters for the data splitter step.
+        test_size: Size of the test set.
+        random_state: The random seed to use for the split.
+        shuffle: Whether to shuffle the dataset before splitting.
+        stratify: Whether to stratify the split.
         dataset: The dataset to split.
 
     Returns:
@@ -301,10 +219,10 @@ def data_splitter(
     # Split the dataset into training and dev subsets
     train_set, test_set = train_test_split(
         dataset,
-        test_size=params.test_size,
-        shuffle=params.shuffle,
-        stratify=dataset['target'] if params.stratify else None,
-        random_state=params.random_state,
+        test_size=test_size,
+        shuffle=shuffle,
+        stratify=dataset['target'] if stratify else None,
+        random_state=random_state,
     )
     ### YOUR CODE ENDS HERE ###
 

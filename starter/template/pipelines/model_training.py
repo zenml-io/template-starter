@@ -1,8 +1,8 @@
 {% include 'templates/license_header' %}
 
-from zenml.pipelines import pipeline
+from zenml import pipeline
 
-@pipeline()
+@pipeline
 def model_training_pipeline(
     data_loader,
     data_processor,
