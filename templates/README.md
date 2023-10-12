@@ -44,7 +44,7 @@ source .venv/bin/activate
 # Install requirements
 pip install -r requirements.txt
 # Start the ZenML UI locally (recommended, but optional);
-# the default username is "admin" with an empty password
+# the default username is "default" with an empty password
 zenml up
 # Run the pipeline included in the project
 python run.py
