@@ -81,7 +81,7 @@ def model_evaluator(
             logger.warning(message)
 
     log_artifact_metadata(
-        metadata={"train_accuracy": trn_acc, "test_accuracy": tst_acc},
+        metadata={"train_accuracy": float(trn_acc), "test_accuracy": float(tst_acc)},
         artifact_name="model",
     )
     ### YOUR CODE ENDS HERE ###
