@@ -39,7 +39,7 @@ def _inference(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
-    raw_data, target, _ = data_loader(random_state=random.randint(0,100))
+    raw_data, target, _ = data_loader(random_state=random.randint(0, 100))
     dataset_trn, dataset_tst = data_splitter(
         dataset=raw_data,
         test_size=test_size,

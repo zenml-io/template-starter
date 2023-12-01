@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from utils.preprocess import ColumnsDropper, DataFrameCaster, NADropper
-from zenml import step
+from zenml import step, log_artifact_metadata
 
 
 @step
@@ -17,6 +17,7 @@ def data_preprocessor(
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,
     drop_columns: Optional[List[str]] = None,
+    target: Optional[str] = "target",
 ) -> Tuple[
     Annotated[pd.DataFrame, "dataset_trn"],
     Annotated[pd.DataFrame, "dataset_tst"],
@@ -62,6 +63,16 @@ def data_preprocessor(
     preprocess_pipeline.steps.append(("cast", DataFrameCaster(dataset_trn.columns)))
     dataset_trn = preprocess_pipeline.fit_transform(dataset_trn)
     dataset_tst = preprocess_pipeline.transform(dataset_tst)
-    ### YOUR CODE ENDS HERE ###
 
+    # Log metadata of target to both datasets
+    log_artifact_metadata(
+        artifact_name="dataset_trn",
+        metadata={"target": target},
+    )
+    log_artifact_metadata(
+        artifact_name="dataset_tst",
+        metadata={"target": target},
+    )
+
+    ### YOUR CODE ENDS HERE ###
     return dataset_trn, dataset_tst, preprocess_pipeline

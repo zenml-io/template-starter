@@ -2,7 +2,7 @@
 
 import pandas as pd
 from sklearn.base import ClassifierMixin
-from zenml import step
+from zenml import step, log_artifact_metadata
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -16,7 +16,6 @@ def model_evaluator(
     target: str,
     min_train_accuracy: float = 0.0,
     min_test_accuracy: float = 0.0,
-    fail_on_accuracy_quality_gates: bool = False,
 ) -> None:
     """Evaluate a trained model.
 
@@ -77,13 +76,12 @@ def model_evaluator(
         messages.append(
             f"Test accuracy {tst_acc*100:.2f}% is below {min_test_accuracy*100:.2f}% !"
         )
-    if fail_on_accuracy_quality_gates and messages:
-        raise RuntimeError(
-            "Model performance did not meet the minimum criteria:\n"
-            + "\n".join(messages)
-        )
     else:
         for message in messages:
             logger.warning(message)
 
+    log_artifact_metadata(
+        metadata={"train_accuracy": trn_acc, "test_accuracy": tst_acc},
+        artifact_name="model",
+    )
     ### YOUR CODE ENDS HERE ###

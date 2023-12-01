@@ -1,16 +1,20 @@
 # {% include 'template/license_header' %}
 
-import random
-from typing import Optional, List
+from typing import Optional
 
 from zenml import pipeline
 from zenml.logger import get_logger
+from uuid import UUID
 
-from steps import (
-    data_loader,
-    data_splitter,
-    data_preprocessor,
+
+from steps import model_trainer, model_evaluator
+
+from pipelines import (
+    _feature_engineering,
 )
+
+from zenml import ExternalArtifact
+from zenml.client import Client
 
 
 logger = get_logger(__name__)
@@ -18,10 +22,10 @@ logger = get_logger(__name__)
 
 @pipeline
 def _training(
-    test_size: float = 0.2,
-    drop_na: Optional[bool] = None,
-    normalize: Optional[bool] = None,
-    drop_columns: Optional[List[str]] = None,
+    train_dataset_id: Optional[UUID] = None,
+    test_dataset_id: Optional[UUID] = None,
+    min_train_accuracy: float = 0.0,
+    min_test_accuracy: float = 0.0,
 ):
     """
     Model training pipeline.
@@ -39,15 +43,28 @@ def _training(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
-    raw_data, target, _ = data_loader(random_state=random.randint(0,100))
-    dataset_trn, dataset_tst = data_splitter(
-        dataset=raw_data,
-        test_size=test_size,
+
+    # Execute Feature Engineering Pipeline
+    if train_dataset_id is None or test_dataset_id is None:
+        dataset_trn, dataset_tst = _feature_engineering()
+    else:
+        dataset_trn = ExternalArtifact(id=train_dataset_id)
+        dataset_tst = ExternalArtifact(id=test_dataset_id)
+
+    # Use the metadata of the dataset to understand what the target is
+    client = Client()
+    target = client.get_artifact("dataset_trn").run_metadata["target"].value
+
+    model = model_trainer(
+        dataset_trn=dataset_trn,
+        target=target,
     )
-    dataset_trn, dataset_tst, _ = data_preprocessor(
+
+    model_evaluator(
+        model=model,
         dataset_trn=dataset_trn,
         dataset_tst=dataset_tst,
-        drop_na=drop_na,
-        normalize=normalize,
-        drop_columns=drop_columns,
+        min_train_accuracy=min_train_accuracy,
+        min_test_accuracy=min_test_accuracy,
+        target=target,
     )

@@ -20,6 +20,7 @@ from zenml import ModelVersion, ModelStages, Client
 
 logger = get_logger(__name__)
 
+
 @click.command(
     help="""
 ZenML NLP project CLI v0.0.1.
@@ -182,8 +183,8 @@ def main(
     # all steps in the pipeline in the correct order using the orchestrator
     # stack component that is configured in your active ZenML stack.
     config_folder = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            "configs",
+        os.path.dirname(os.path.realpath(__file__)),
+        "configs",
     )
     model_version = ModelVersion(
         name=zenml_model_name,
@@ -202,7 +203,9 @@ def main(
     # Execute Feature Engineering Pipeline
     if feature_pipeline:
         pipeline_args["model_version"] = model_version
-        pipeline_args["config_path"] = os.path.join(config_folder, "feature_engineering_config.yaml")
+        pipeline_args["config_path"] = os.path.join(
+            config_folder, "feature_engineering_config.yaml"
+        )
         run_args_feature = {
             "max_seq_length": max_seq_length,
         }
@@ -216,7 +219,9 @@ def main(
 
     # Execute Training Pipeline
     if training_pipeline:
-        pipeline_args["config_path"] = os.path.join(config_folder, "trainer_config.yaml")
+        pipeline_args["config_path"] = os.path.join(
+            config_folder, "trainer_config.yaml"
+        )
 
         run_args_train = {
             "num_epochs": num_epochs,
@@ -263,7 +268,9 @@ def main(
             name=zenml_model_name,
             version=ModelStages.LATEST,
         )
-        pipeline_args["config_path"] = os.path.join(config_folder, "promoting_config.yaml")
+        pipeline_args["config_path"] = os.path.join(
+            config_folder, "promoting_config.yaml"
+        )
 
         pipeline_args["model_version"] = model_version
 
@@ -276,7 +283,9 @@ def main(
         logger.info("Promoting pipeline finished successfully!")
 
     if deploying_pipeline:
-        pipeline_args["config_path"] = os.path.join(config_folder, "deploying_config.yaml")
+        pipeline_args["config_path"] = os.path.join(
+            config_folder, "deploying_config.yaml"
+        )
 
         # Deploying pipeline has new ZenML model config
         model_version = ModelVersion(
