@@ -4,8 +4,11 @@ from typing import List, Optional
 
 from steps import (
     data_loader,
+    inference_preprocessor,
+    inference_predict,
 )
-from zenml import pipeline
+from zenml import pipeline, ExternalArtifact
+from zenml.client import Client
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -34,8 +37,9 @@ def _inference(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
+    client = Client()
     random_state = client.get_artifact("dataset").run_metadata["random_state"].value
-    target = client.get_artifact("dataset_trn").run_metadata["target"].value
+    target = "target"
     df_inference = data_loader(random_state=random_state, is_inference=True)
     df_inference = inference_preprocessor(
         dataset_inf=df_inference,
@@ -45,28 +49,4 @@ def _inference(
     inference_predict(
         dataset_inf=df_inference,
     )
-
-
-@pipeline
-def _batch_inference():
-    """
-    Model batch inference pipeline.
-
-    This is a pipeline that loads the inference data, processes
-    it, analyze for data drift and run inference.
-    """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Link all the steps together by calling them and passing the output
-    # of one step as the input of the next step.
-    ########## ETL stage  ##########
-    random_state = client.get_artifact("dataset").run_metadata["random_state"].value
-    target = client.get_artifact("dataset_trn").run_metadata["target"].value
-    df_inference = data_loader(random_state=random_state, is_inference=True)
-    df_inference = inference_preprocessor(
-        dataset_inf=df_inference,
-        preprocess_pipeline=ExternalArtifact(name="preprocess_pipeline"),
-        target=target,
-    )
-    inference_predict(
-        dataset_inf=df_inference,
-    )
+    ### END CODE HERE ###

@@ -2,7 +2,7 @@
 
 import pandas as pd
 from sklearn.base import ClassifierMixin
-from zenml import log_artifact_metadata, step
+from zenml import step, log_artifact_metadata
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -15,7 +15,7 @@ def model_evaluator(
     dataset_tst: pd.DataFrame,
     min_train_accuracy: float = 0.0,
     min_test_accuracy: float = 0.0,
-) -> None:
+) -> float:
     """Evaluate a trained model.
 
     This is an example of a model evaluation step that takes in a model artifact
@@ -48,6 +48,9 @@ def model_evaluator(
         min_test_accuracy: Minimal acceptable testing accuracy value.
         fail_on_accuracy_quality_gates: If `True` a `RuntimeException` is raised
             upon not meeting one of the minimal accuracy thresholds.
+
+    Retuns:
+        The model accuracy on the test set.
 
     Raises:
         RuntimeError: if any of accuracies is lower than respective threshold
@@ -86,4 +89,6 @@ def model_evaluator(
         metadata={"train_accuracy": float(trn_acc), "test_accuracy": float(tst_acc)},
         artifact_name="model",
     )
+
     ### YOUR CODE ENDS HERE ###
+    return float(trn_acc)

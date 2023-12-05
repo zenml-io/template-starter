@@ -3,7 +3,7 @@
 from typing import Optional
 from uuid import UUID
 
-from steps import model_evaluator, model_trainer
+from steps import model_evaluator, model_trainer, model_promoter
 from zenml import ExternalArtifact, pipeline
 from zenml.logger import get_logger
 
@@ -49,11 +49,13 @@ def _training(
         dataset_trn=dataset_trn,
     )
 
-    model_evaluator(
+    acc = model_evaluator(
         model=model,
         dataset_trn=dataset_trn,
         dataset_tst=dataset_tst,
         min_train_accuracy=min_train_accuracy,
         min_test_accuracy=min_test_accuracy,
     )
+
+    model_promoter(accuracy=acc)
     ### END CODE HERE ###

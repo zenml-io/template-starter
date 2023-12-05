@@ -7,7 +7,6 @@ settings:
 # configuration of the Model Control Plane
 model_version:
   name: breast_cancer_classifier
-  version: latest
   license: Apache 2.0
   description: Classification of Breast Cancer Dataset.
   tags: ["classification", "sklearn"]
