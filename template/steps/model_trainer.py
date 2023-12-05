@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.base import ClassifierMixin
-from zenml import ArtifactConfig, log_artifact_metadata, step
+from zenml import ArtifactConfig, get_step_context, step
 from zenml.client import Client
 from zenml.logger import get_logger
 
@@ -15,7 +15,6 @@ logger = get_logger(__name__)
 @step
 def model_trainer(
     dataset_trn: pd.DataFrame,
-    target: str,
 ) -> Annotated[ClassifierMixin, ArtifactConfig(name="model", is_model_artifact=True)]:
     """Configure and train a model on the training dataset.
 
@@ -33,6 +32,12 @@ def model_trainer(
     """
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+    
+    # Use the dataset to fetch the target    
+    # context = get_step_context()
+    # target = context.inputs["dataset_trn"].run_metadata['target'].value
+    target = "target"
+
     # Initialize the model with the hyperparameters indicated in the step
     # parameters and train it on the training set.
     model = DecisionTreeClassifier()

@@ -13,7 +13,6 @@ def model_evaluator(
     model: ClassifierMixin,
     dataset_trn: pd.DataFrame,
     dataset_tst: pd.DataFrame,
-    target: str,
     min_train_accuracy: float = 0.0,
     min_test_accuracy: float = 0.0,
 ) -> None:
@@ -45,7 +44,6 @@ def model_evaluator(
         model: The pre-trained model artifact.
         dataset_trn: The train dataset.
         dataset_tst: The test dataset.
-        target: Name of target columns in dataset.
         min_train_accuracy: Minimal acceptable training accuracy value.
         min_test_accuracy: Minimal acceptable testing accuracy value.
         fail_on_accuracy_quality_gates: If `True` a `RuntimeException` is raised
@@ -55,6 +53,10 @@ def model_evaluator(
         RuntimeError: if any of accuracies is lower than respective threshold
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+    # context = get_step_context()
+    # target = context.inputs["dataset_trn"].run_metadata['target'].value
+    target = "target"
+
     # Calculate the model accuracy on the train and test set
     trn_acc = model.score(
         dataset_trn.drop(columns=[target]),
