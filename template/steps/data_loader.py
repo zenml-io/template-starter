@@ -3,9 +3,8 @@
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from typing_extensions import Annotated
-from zenml import step
+from zenml import log_artifact_metadata, step
 from zenml.logger import get_logger
-from zenml import log_artifact_metadata
 
 logger = get_logger(__name__)
 

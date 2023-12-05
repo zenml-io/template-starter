@@ -1,12 +1,10 @@
 # {% include 'template/license_header' %}
 
-from typing_extensions import Annotated
-
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.base import ClassifierMixin
-from zenml import ArtifactConfig, get_step_context, step
-from zenml.client import Client
+from sklearn.tree import DecisionTreeClassifier
+from typing_extensions import Annotated
+from zenml import ArtifactConfig, step
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -32,8 +30,8 @@ def model_trainer(
     """
 
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    
-    # Use the dataset to fetch the target    
+
+    # Use the dataset to fetch the target
     # context = get_step_context()
     # target = context.inputs["dataset_trn"].run_metadata['target'].value
     target = "target"

@@ -1,17 +1,15 @@
 # {% include 'template/license_header' %}
 
 import random
-from typing import Optional, List
-
-from zenml import pipeline
-from zenml.logger import get_logger
+from typing import List, Optional
 
 from steps import (
     data_loader,
-    data_splitter,
     data_preprocessor,
+    data_splitter,
 )
-
+from zenml import pipeline
+from zenml.logger import get_logger
 
 logger = get_logger(__name__)
 

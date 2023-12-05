@@ -1,5 +1,5 @@
 # {% include 'template/license_header' %}
 
-from feature_engineering import _feature_engineering
-from training import _model_training
-from inference import _inference
+from .feature_engineering import _feature_engineering
+from .inference import _inference
+from .training import _training

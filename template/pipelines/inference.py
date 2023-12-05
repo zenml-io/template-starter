@@ -1,17 +1,12 @@
 # {% include 'template/license_header' %}
 
-import random
-from typing import Optional, List
-
-from zenml import pipeline
-from zenml.logger import get_logger
+from typing import List, Optional
 
 from steps import (
     data_loader,
-    data_splitter,
-    data_preprocessor,
 )
-
+from zenml import pipeline
+from zenml.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -39,15 +34,39 @@ def _inference(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
-    raw_data, target, _ = data_loader(random_state=random.randint(0, 100))
-    dataset_trn, dataset_tst = data_splitter(
-        dataset=raw_data,
-        test_size=test_size,
+    random_state = client.get_artifact("dataset").run_metadata["random_state"].value
+    target = client.get_artifact("dataset_trn").run_metadata["target"].value
+    df_inference = data_loader(random_state=random_state, is_inference=True)
+    df_inference = inference_preprocessor(
+        dataset_inf=df_inference,
+        preprocess_pipeline=ExternalArtifact(name="preprocess_pipeline"),
+        target=target,
     )
-    dataset_trn, dataset_tst, _ = data_preprocessor(
-        dataset_trn=dataset_trn,
-        dataset_tst=dataset_tst,
-        drop_na=drop_na,
-        normalize=normalize,
-        drop_columns=drop_columns,
+    inference_predict(
+        dataset_inf=df_inference,
+    )
+
+
+@pipeline
+def _batch_inference():
+    """
+    Model batch inference pipeline.
+
+    This is a pipeline that loads the inference data, processes
+    it, analyze for data drift and run inference.
+    """
+    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+    # Link all the steps together by calling them and passing the output
+    # of one step as the input of the next step.
+    ########## ETL stage  ##########
+    random_state = client.get_artifact("dataset").run_metadata["random_state"].value
+    target = client.get_artifact("dataset_trn").run_metadata["target"].value
+    df_inference = data_loader(random_state=random_state, is_inference=True)
+    df_inference = inference_preprocessor(
+        dataset_inf=df_inference,
+        preprocess_pipeline=ExternalArtifact(name="preprocess_pipeline"),
+        target=target,
+    )
+    inference_predict(
+        dataset_inf=df_inference,
     )

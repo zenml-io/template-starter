@@ -1,21 +1,15 @@
 # {% include 'template/license_header' %}
 
 from typing import Optional
-
-from zenml import pipeline
-from zenml.logger import get_logger
 from uuid import UUID
 
-
-from steps import model_trainer, model_evaluator
+from steps import model_evaluator, model_trainer
+from zenml import ExternalArtifact, pipeline
+from zenml.logger import get_logger
 
 from pipelines import (
     _feature_engineering,
 )
-
-from zenml import ExternalArtifact
-from zenml.client import Client
-
 
 logger = get_logger(__name__)
 
@@ -51,13 +45,8 @@ def _training(
         dataset_trn = ExternalArtifact(id=train_dataset_id)
         dataset_tst = ExternalArtifact(id=test_dataset_id)
 
-    # Use the metadata of the dataset to understand what the target is
-    client = Client()
-    target = client.get_artifact("dataset_trn").run_metadata["target"].value
-
     model = model_trainer(
         dataset_trn=dataset_trn,
-        target=target,
     )
 
     model_evaluator(
@@ -66,5 +55,5 @@ def _training(
         dataset_tst=dataset_tst,
         min_train_accuracy=min_train_accuracy,
         min_test_accuracy=min_test_accuracy,
-        target=target,
     )
+    ### END CODE HERE ###

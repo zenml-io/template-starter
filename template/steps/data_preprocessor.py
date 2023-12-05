@@ -1,13 +1,13 @@
 # {% include 'template/license_header' %}
 
 from typing import List, Optional, Tuple
-from typing_extensions import Annotated
 
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
+from typing_extensions import Annotated
 from utils.preprocess import ColumnsDropper, DataFrameCaster, NADropper
-from zenml import step, log_artifact_metadata
+from zenml import log_artifact_metadata, step
 
 
 @step

@@ -15,11 +15,9 @@
 # limitations under the License.
 #
 
-from typing import Optional
 
 import pandas as pd
 from typing_extensions import Annotated
-
 from zenml import get_step_context, step
 from zenml.logger import get_logger
 
