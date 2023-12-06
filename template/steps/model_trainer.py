@@ -10,7 +10,7 @@ from zenml.logger import get_logger
 logger = get_logger(__name__)
 
 
-@step
+@step(enable_cache=False) #, step_operator="sagemaker-eu")
 def model_trainer(
     dataset_trn: pd.DataFrame,
 ) -> Annotated[ClassifierMixin, ArtifactConfig(name="model", is_model_artifact=True)]:

@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 
 @pipeline
-def _inference(
+def inference(
     test_size: float = 0.2,
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,

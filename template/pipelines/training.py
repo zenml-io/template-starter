@@ -8,14 +8,14 @@ from zenml import ExternalArtifact, pipeline
 from zenml.logger import get_logger
 
 from pipelines import (
-    _feature_engineering,
+    feature_engineering,
 )
 
 logger = get_logger(__name__)
 
 
 @pipeline
-def _training(
+def training(
     train_dataset_id: Optional[UUID] = None,
     test_dataset_id: Optional[UUID] = None,
     min_train_accuracy: float = 0.0,
@@ -40,7 +40,7 @@ def _training(
 
     # Execute Feature Engineering Pipeline
     if train_dataset_id is None or test_dataset_id is None:
-        dataset_trn, dataset_tst = _feature_engineering()
+        dataset_trn, dataset_tst = feature_engineering()
     else:
         dataset_trn = ExternalArtifact(id=train_dataset_id)
         dataset_tst = ExternalArtifact(id=test_dataset_id)

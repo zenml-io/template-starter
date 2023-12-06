@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 
 @pipeline
-def _feature_engineering(
+def feature_engineering(
     test_size: float = 0.2,
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,
