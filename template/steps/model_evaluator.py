@@ -91,4 +91,4 @@ def model_evaluator(
     )
 
     ### YOUR CODE ENDS HERE ###
-    return float(trn_acc)
+    return float(tst_acc)

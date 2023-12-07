@@ -1,53 +1,103 @@
-# 📜 ZenML Starter Project Template
+# :running: MLOps 101 with ZenML
 
-What would you need to get a quick understanding of the ZenML framework and
-start building your own ML pipelines? The answer is a simple project template
-to cover the basics of ZenML: a collection of steps and pipelines, a stack
-configuration and, to top it all off, a simple but useful CLI. This is exactly
-what the ZenML starter template is all about.
+Build your first MLOps pipelines with ZenML.
 
-This project template is a good starting point for anyone starting out with
-ZenML. It showcases the following fundamental ZenML concepts in a relatable
-ML context:
+## :earth_americas: Overview
 
-* designing [ZenML pipeline steps](https://docs.zenml.io/user-guide/starter-guide#pipelines-and-steps)
-in general, but also particularly useful for the following applications:
-    * data ingestion, data transformation and data train/test splitting
-    * model training and evaluation
-* using [step parameterization and caching](https://docs.zenml.io/user-guide/starter-guide/cache-previous-executions)
-to design flexible and reusable steps
-* using [custom data types for your artifacts and writing materializers for them](https://docs.zenml.io/user-guide/advanced-guide/artifact-management/handle-custom-data-types)
-* constructing and running a [ZenML pipeline](https://docs.zenml.io/user-guide/starter-guide#pipelines-and-steps)
-* accessing ZenML pipeline run artifacts in [the post-execution phase](https://docs.zenml.io/user-guide/starter-guide/fetch-runs-after-execution),
-after a pipeline run has concluded
-* best practices for implementing and running reproducible and reliable ML
-pipelines with ZenML
+This starter project demonstrates a complete minimalist MLOps journey. It features:
 
-In addition to that, the entire project is implemented with the [scikit-learn](https://scikit-learn.org)
-library and showcases how to use ZenML with a popular ML framework. It makes
-heavy use of the tabular datasets and classification models that scikit-learn
-provides, but the concepts and patterns it showcases are applicable to any
-other ML framework.
+- A feature engineering pipeline that loads data and prepares it for training.
+- A training pipeline that loads the preprocessed dataset and trains a model.
+- A batch inference pipeline that runs predictions on the trained model with new data.
 
-## 📃 Template Parameters
+Along the way we will also show you how to:
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| Name | The name of the person/entity holding the copyright | ZenML GmbH |
-| Email | The email of the person/entity holding the copyright | info@zenml.io |
-| Project Name | Short name for your project | ZenML Starter |
-| Project Slug | A slugified version of the project name (automatically generated from the project name) | zenml_starter |
-| Project Version | The version of your project | 0.1.0 |
-| Project License | The license under which your project will be released (one of `Apache Software License 2.0`, `MIT license`, `BSD license`, `ISC license`, `GNU General Public License v3` and `Not open source`) | Apache Software License 2.0 |
-| Auto-Format | Whether to automatically format and cleanup the generated code with [black](https://black.readthedocs.io/), [ruff](https://beta.ruff.rs/docs/) and [autoflake](https://github.com/PyCQA/autoflake) (yes/no). You also need to have these Python packages installed for this option to take effect. | no |
-| Use ZenML Step Params | Whether to showcase using parameters for the ZenML steps in the project (yes/no). If selected, all generated ZenML pipeline steps will be parameterized. | yes |
-| Use ZenML Materializers | Whether to showcase using custom data types for the ZenML artifacts in the project (yes/no). If selected, the generated code will demonstrate the use of custom artifact data types and materializers in the generated steps and pipelines. | yes |
-| UCI Dataset | The name of the UCI provided scikit-learn dataset to use in the project (one of `Iris`, `Breast Cancer` and `Wine`) | Wine |
-| Scikit-learn Model | The name of the scikit-learn classifier model to use in the project (one of `Logistic Regression`, `SVC`, `Linear SVC`, `Random Forest`, `KNN`, `Gaussian NB`, `Perceptron`, `SGD Classifier` and `Decision Tree`) | Logistic Regression |
-| Runtime Configurable Dataset | Whether to make the dataset a configurable parameter of the data loader step and CLI (yes/no). Only has effect if the step parameters were also selected. | yes |
-| Runtime Configurable Model | Whether to make the model a configurable parameter of the model trainer step and CLI (yes/no). Only has effect if the step parameters were also selected. | yes |
+- Structure your code into MLOps pipelines
+- Automatically version, track, and cache data, models, and other artifacts
+- Transition your ML models from development to production
 
-## 🚀 Generate a ZenML Project
+## :cloud: Run on Colab
 
-Please see [the main README page](../README.md) for instructions on how to
-generate a ZenML project from this template.
+You can use Google Colab to see ZenML in action, no signup / installation required!
+
+<a href="https://colab.research.google.com/github/zenml-io/zenml/blob/main/examples/quickstart/run.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+## :computer: Run Locally
+
+To run locally, install ZenML and pull this quickstart:
+
+```shell
+# Install ZenML
+pip install "zenml[server]"
+
+# clone the ZenML repository
+git clone https://github.com/zenml-io/zenml.git
+cd zenml/examples/quickstart
+```
+
+### :arrow_forward: Run Locally
+Now we're ready to start. You have two options for running the quickstart locally:
+
+#### Option 1 (*Recommended*) - Interactively explore the quickstart using Jupyter Notebook:
+```bash
+pip install notebook
+jupyter notebook
+# open notebooks/quickstart.ipynb
+```
+
+#### Option 2 - Execute the whole ML pipeline from a Python script:
+```bash
+# Install required zenml integrations
+zenml integration install sklearn -y
+
+# Initialize ZenML
+zenml init
+
+# Start the ZenServer to enable dashboard access
+zenml up
+
+# Run the feature engineering pipeline
+python run.py --feature-pipeline
+
+# Run the training pipeline
+python run.py --training-pipeline
+
+# Run the training pipeline with versioned artifacts
+python run.py --training-pipeline --train-dataset-version-name=1 --test-dataset-version-name=1
+
+# Run the inference pipeline
+python run.py --inference-pipeline
+```
+
+## :dart: Dashboard
+
+You can also take a look at our **dashboard** where you can inspect the quickstart
+pipeline run and much more. Simply execute:
+
+```shell
+# only once you've already run `zenml up`
+zenml show
+```
+
+## :sponge: Clean up
+
+To clean up, simply spin down the ZenML server.
+
+```shell
+zenml down
+```
+
+## :bulb: Learn More
+
+If you want to learn more about ZenML as a tool, then the 
+[:page_facing_up: **ZenML Docs**](https://docs.zenml.io/) are the perfect place 
+to get started.
+
+Already have an MLOps stack in mind? ZenML most likely has
+[**:link: Integrations**](https://docs.zenml.io/stacks-and-components/component-guide) 
+for whatever tools you plan to use.
+
+Also, make sure to join our <a href="https://zenml.io/slack" target="_blank">
+    <img width="15" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/306_Slack-512.png" alt="Slack"/>
+    <b>Slack Community</b> 
+</a> to become part of the ZenML family!
