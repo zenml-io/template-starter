@@ -3,7 +3,7 @@
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from typing_extensions import Annotated
-from zenml import log_artifact_metadata, step
+from zenml import step
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -45,9 +45,5 @@ def data_loader(
         dataset.drop(inference_subset.index, inplace=True)
     dataset.reset_index(drop=True, inplace=True)
     logger.info(f"Dataset with {len(dataset)} records loaded!")
-
-    # Recording metadata for this dataset
-    log_artifact_metadata(metadata={"random_state": random_state, target: target})
-
     ### YOUR CODE ENDS HERE ###
     return dataset

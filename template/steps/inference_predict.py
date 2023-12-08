@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-
+from typing import Any
 import pandas as pd
 from typing_extensions import Annotated
 from zenml import get_step_context, step
@@ -26,6 +26,7 @@ logger = get_logger(__name__)
 
 @step
 def inference_predict(
+    model: Any,
     dataset_inf: pd.DataFrame,
 ) -> Annotated[pd.Series, "predictions"]:
     """Predictions step.
@@ -47,11 +48,8 @@ def inference_predict(
         The predictions as pandas series
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    model_version = get_step_context().model_version
-
     # run prediction from memory
-    predictor = model_version.load_artifact("model")
-    predictions = predictor.predict(dataset_inf)
+    predictions = model.predict(dataset_inf)
 
     predictions = pd.Series(predictions, name="predicted")
     ### YOUR CODE ENDS HERE ###

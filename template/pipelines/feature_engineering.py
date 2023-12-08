@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 
 @pipeline
-def _feature_engineering(
+def feature_engineering(
     test_size: float = 0.2,
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,
@@ -38,7 +38,8 @@ def _feature_engineering(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
-    raw_data = data_loader(random_state=random.randint(0, 100), target=target)
+    random_state = random.randint(0, 100)
+    raw_data = data_loader(random_state=random_state, target=target)
     dataset_trn, dataset_tst = data_splitter(
         dataset=raw_data,
         test_size=test_size,
@@ -50,5 +51,6 @@ def _feature_engineering(
         normalize=normalize,
         drop_columns=drop_columns,
         target=target,
+        random_state=random_state,
     )
     return dataset_trn, dataset_tst

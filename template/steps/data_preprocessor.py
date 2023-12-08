@@ -14,6 +14,7 @@ from zenml import log_artifact_metadata, step
 def data_preprocessor(
     dataset_trn: pd.DataFrame,
     dataset_tst: pd.DataFrame,
+    random_state: int,
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,
     drop_columns: Optional[List[str]] = None,
@@ -45,6 +46,7 @@ def data_preprocessor(
         drop_na: If `True` all NA rows will be dropped.
         normalize: If `True` all numeric fields will be normalized.
         drop_columns: List of column names to drop.
+        random_state: Random state for sampling.
 
     Returns:
         The processed datasets (dataset_trn, dataset_tst) and fitted `Pipeline` object.
@@ -64,14 +66,10 @@ def data_preprocessor(
     dataset_trn = preprocess_pipeline.fit_transform(dataset_trn)
     dataset_tst = preprocess_pipeline.transform(dataset_tst)
 
-    # Log metadata of target to both datasets
+    # Log metadata so we can load it in the inference pipeline
     log_artifact_metadata(
-        artifact_name="dataset_trn",
-        metadata={"target": target},
-    )
-    log_artifact_metadata(
-        artifact_name="dataset_tst",
-        metadata={"target": target},
+        artifact_name="preprocess_pipeline",
+        metadata={"random_state": random_state, "target": target},
     )
 
     ### YOUR CODE ENDS HERE ###

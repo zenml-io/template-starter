@@ -1,5 +1,6 @@
 # {% include 'template/license_header' %}
 
+from uuid import UUID
 from typing import List, Optional
 
 from steps import (
@@ -7,7 +8,7 @@ from steps import (
     inference_preprocessor,
     inference_predict,
 )
-from zenml import pipeline, ExternalArtifact
+from zenml import pipeline, ArtifactVersionResponse, get_pipeline_context
 from zenml.client import Client
 from zenml.logger import get_logger
 
@@ -15,38 +16,38 @@ logger = get_logger(__name__)
 
 
 @pipeline
-def _inference(
-    test_size: float = 0.2,
-    drop_na: Optional[bool] = None,
-    normalize: Optional[bool] = None,
-    drop_columns: Optional[List[str]] = None,
-):
+def inference():
     """
-    Model training pipeline.
-
-    This is a pipeline that loads the data, processes it and splits
-    it into train and test sets, then search for best hyperparameters,
-    trains and evaluates a model.
-
-    Args:
-        test_size: Size of holdout set for training 0.0..1.0
-        drop_na: If `True` NA values will be removed from dataset
-        normalize: If `True` dataset will be normalized with MinMaxScaler
-        drop_columns: List of columns to drop from dataset
+    Model inference pipeline.
+    
+    This is a pipeline that loads the inference data, processes it with
+    the same preprocessing pipeline used in training, and runs inference
+    with the trained model.
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # Link all the steps together by calling them and passing the output
-    # of one step as the input of the next step.
     client = Client()
-    random_state = client.get_artifact("dataset").run_metadata["random_state"].value
-    target = "target"
+    
+    # Get the production model artifact
+    model: ArtifactVersionResponse = get_pipeline_context().model_version.get_artifact("model")
+        
+    # Get the preprocess pipeline artifact associated with this version
+    preprocess_pipeline: ArtifactVersionResponse = get_pipeline_context().model_version.get_artifact("preprocess_pipeline")
+
+    # Use the metadata of feature engineering pipeline artifact
+    #  to get the random state and target column
+    random_state = client.get_artifact_version(preprocess_pipeline.id).run_metadata["random_state"].value
+    target = client.get_artifact_version(preprocess_pipeline.id).run_metadata['target'].value
+
+    # Link all the steps together by calling them and passing the output
+    #  of one step as the input of the next step.
     df_inference = data_loader(random_state=random_state, is_inference=True)
     df_inference = inference_preprocessor(
         dataset_inf=df_inference,
-        preprocess_pipeline=ExternalArtifact(name="preprocess_pipeline"),
+        preprocess_pipeline=preprocess_pipeline,
         target=target,
     )
     inference_predict(
+        model=model,
         dataset_inf=df_inference,
     )
     ### END CODE HERE ###

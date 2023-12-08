@@ -5,9 +5,9 @@ from typing import Optional
 
 import click
 from pipelines import (
-    _feature_engineering,
-    _inference,
-    _training,
+    feature_engineering,
+    inference,
+    training,
 )
 from zenml.client import Client
 from zenml.logger import get_logger
@@ -115,7 +115,7 @@ def main(
             config_folder, "feature_engineering.yaml"
         )
         run_args_feature = {}
-        _feature_engineering.with_options(**pipeline_args)(**run_args_feature)
+        feature_engineering.with_options(**pipeline_args)(**run_args_feature)
         logger.info("Feature Engineering pipeline finished successfully!")
 
     # Execute Training Pipeline
@@ -133,25 +133,25 @@ def main(
                 and test_dataset_version_name is not None
             )
             client = Client()
-            train_dataset_artifact = client.get_artifact(
+            train_dataset_artifact_version = client.get_artifact_version(
                 train_dataset_name, train_dataset_version_name
             )
             # If train dataset is specified, test dataset must be specified
-            test_dataset_artifact = client.get_artifact(
+            test_dataset_artifact_version = client.get_artifact_version(
                 test_dataset_name, test_dataset_version_name
             )
             # Use versioned artifacts
-            run_args_train["train_dataset_id"] = train_dataset_artifact.id
-            run_args_train["test_dataset_id"] = test_dataset_artifact.id
+            run_args_train["train_dataset_id"] = train_dataset_artifact_version.id
+            run_args_train["test_dataset_id"] = test_dataset_artifact_version.id
 
-        _training.with_options(**pipeline_args)(**run_args_train)
+        training.with_options(**pipeline_args)(**run_args_train)
         logger.info("Training pipeline finished successfully!")
 
     if inference_pipeline:
         pipeline_args = {}
         pipeline_args["config_path"] = os.path.join(config_folder, "inference.yaml")
         run_args_inference = {}
-        _inference.with_options(**pipeline_args)(**run_args_inference)
+        inference.with_options(**pipeline_args)(**run_args_inference)
         logger.info("Inference pipeline finished successfully!")
 
 
