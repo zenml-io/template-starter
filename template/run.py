@@ -103,6 +103,8 @@ def main(
         of which comes from the YAML config files)
       * launching the pipeline
     """
+    client = Client()
+
     config_folder = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         "configs",
@@ -132,7 +134,6 @@ def main(
                 train_dataset_version_name is not None
                 and test_dataset_version_name is not None
             )
-            client = Client()
             train_dataset_artifact_version = client.get_artifact_version(
                 train_dataset_name, train_dataset_version_name
             )
@@ -148,10 +149,27 @@ def main(
         logger.info("Training pipeline finished successfully!")
 
     if inference_pipeline:
+        run_args_train = {}
         pipeline_args = {}
         pipeline_args["config_path"] = os.path.join(config_folder, "inference.yaml")
         run_args_inference = {}
-        inference.with_options(**pipeline_args)(**run_args_inference)
+        
+        # Configure the pipeline
+        inference_configured = inference.with_options(**pipeline_args)
+        
+        # Fetch the production model
+        zenml_model = client.get_model_version("breast_cancer_classifier", "production")
+        preprocess_pipeline_artifact = zenml_model.get_artifact("preprocess_pipeline")
+        
+        # Use the metadata of feature engineering pipeline artifact
+        #  to get the random state and target column
+        random_state = preprocess_pipeline_artifact.run_metadata["random_state"].value
+        target = preprocess_pipeline_artifact.run_metadata['target'].value
+        run_args_inference["random_state"] = random_state
+        run_args_inference["target"] = target
+
+        # Run the pipeline
+        inference_configured(**run_args_inference)
         logger.info("Inference pipeline finished successfully!")
 
 
