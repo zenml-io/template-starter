@@ -65,11 +65,11 @@ def model_evaluator(
         dataset_trn.drop(columns=[target]),
         dataset_trn[target],
     )
-    logger.info(f"Train accuracy={trn_acc*100:.2f}%")
     tst_acc = model.score(
         dataset_tst.drop(columns=[target]),
         dataset_tst[target],
     )
+    logger.info(f"Train accuracy={trn_acc*100:.2f}%")
     logger.info(f"Test accuracy={tst_acc*100:.2f}%")
 
     messages = []

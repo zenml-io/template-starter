@@ -58,4 +58,3 @@ def training(
     )
 
     model_promoter(accuracy=acc)
-    ### END CODE HERE ###

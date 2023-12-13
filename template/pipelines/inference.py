@@ -24,7 +24,6 @@ def inference(random_state: str, target: str):
     the same preprocessing pipeline used in training, and runs inference
     with the trained model.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###    
     # Get the production model artifact
     model = get_pipeline_context().model_version.get_artifact("model")
         
@@ -43,4 +42,3 @@ def inference(random_state: str, target: str):
         model=model,
         dataset_inf=df_inference,
     )
-    ### END CODE HERE ###

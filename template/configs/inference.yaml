@@ -3,11 +3,12 @@ settings:
   docker:
     required_integrations:
       - sklearn
+      - pyarrow
 
 # configuration of the Model Control Plane
 model_version:
   name: breast_cancer_classifier
   version: production
   license: Apache 2.0
-  description: Classification of Breast Cancer Dataset.
-  tags: ["classification", "sklearn"]
+  description: A breast cancer classifier
+  tags: ["breast_cancer", "classifier"]

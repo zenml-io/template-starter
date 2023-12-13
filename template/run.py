@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 
 @click.command(
     help="""
-ZenML Starter project CLI v0.0.1.
+ZenML Starter project.
 
 Run the ZenML starter project with basic options.
 
