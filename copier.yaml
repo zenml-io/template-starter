@@ -1,5 +1,4 @@
 --- # GLOBAL PROMPT --------------------------------
-
 template:
     type: str
     help: >-
@@ -44,17 +43,6 @@ auto_format:
     type: bool
     help: "Auto-format the generated code with black, ruff and autoflake? \n   (NOTE: you need to have these tools installed in your environment)"
     default: false
-zenml_server_url:
-    type: str
-    help: "The URL of the ZenML server [Optional]"
-    default: ""
-
-# SUB-TEMPLATE PROMPT [starter] ---------------------
-use_step_params:
-    type: bool
-    help: "Would you like to see step parameters being used in the generated \n   ZenML steps?"
-    default: true
-    when: "{{ template == 'starter' }}"
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""

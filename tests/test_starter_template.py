@@ -33,7 +33,6 @@ def generate_and_run_project(
     tmp_path_factory: pytest.TempPathFactory,
     open_source_license: Optional[str] = "apache",
     product_name: str = "starter_project",
-    zenml_server_url: str = "",
 ):
     """Generate and run the starter project with different options."""
 
@@ -42,7 +41,6 @@ def generate_and_run_project(
         "version": "0.0.1",
         "open_source_license": str(open_source_license).lower(),
         "product_name": product_name,
-        "zenml_server_url": zenml_server_url,
     }
     if open_source_license:
         answers["email"] = "pytest@zenml.io"
