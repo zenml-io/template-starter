@@ -51,55 +51,6 @@ use_step_params:
     help: "Would you like to see step parameters being used in the generated \n   ZenML steps?"
     default: true
     when: "{{ template == 'starter' }}"
-use_custom_artifacts:
-    type: bool
-    help: "Would you like to see custom artifact data types and materializers \n   being used in the generated ZenML steps and pipelines?"
-    default: true
-    when: "{{ template == 'starter' }}"
-configurable_dataset:
-    type: bool
-    help: "Would you like to be able to select the dataset used in model training\n   at runtime through the CLI and as a data loader step parameter?"
-    default: true
-    when: "{{ template == 'starter' and use_step_params }}"
-sklearn_dataset_name:
-    type: str
-    help: "The generated ZenML project will be populated with some example code
-    \n   featuring one of the UCI ML datasets from scikit-learn. \n   Which
-    dataset would you like to see being used in the generated code?"
-    choices:
-        UCI Wine Data Set (classification): wine
-        UCI Iris Data Set (classification): iris
-        UCI Breast Cancer Wisconsin (Diagnostic) Data Set (classification): breast_cancer
-    default: wine
-    when: "{{ template == 'starter' }}"
-configurable_model:
-    type: bool
-    help: "Would you like to be able to select the type of model used in model \n
-    training at runtime through the CLI and as a model trainer step \n
-    parameter?"
-    default: true
-    help: >-
-        Would you like to be able to select the type of model used in model
-        training at runtime through the CLI and as a model trainer step
-        parameter ?
-    default: true
-    when: "{{ template == 'starter' and use_step_params }}"
-sklearn_model_name:
-    type: str
-    help: "The generated ZenML project will be populated with some example code
-    \n   featuring one of the scikit-learn classifier models. \n   Which model class would you like to see being used in the generated code?"
-    choices:
-        Logistic Regression: LogisticRegression
-        C-Support Vector Classification: SVC
-        Linear Support Vector Classification: LinearSVC
-        Random Forest Classifier: RandomForestClassifier
-        K-Nearest Neighbors Classifier: KNeighborsClassifier
-        Gaussian Naive Bayes: GaussianNB
-        Linear Perceptron Classifier: Perceptron
-        Stochastic Gradient Descent Linear Classifier: SGDClassifier
-        Decision Tree Classifier: DecisionTreeClassifier
-    default: LogisticRegression
-    when: "{{ template == 'starter' }}"
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""
