@@ -32,13 +32,7 @@ TEMPLATE_DIRECTORY = str(pathlib.Path.joinpath(pathlib.Path(__file__).parent.par
 def generate_and_run_project(
     tmp_path_factory: pytest.TempPathFactory,
     open_source_license: Optional[str] = "apache",
-    product_name: str = "e2e_pipeline_pytest",
-    hyperparameters_tuning: bool = True,
-    metric_compare_promotion: bool = True,
-    data_quality_checks: bool = True,
-    target_environment: str = "staging",
-    notify_on_failures: bool = True,
-    notify_on_successes: bool = False,
+    product_name: str = "starter_project",
     zenml_server_url: str = "",
 ):
     """Generate and run the starter project with different options."""
@@ -48,12 +42,6 @@ def generate_and_run_project(
         "version": "0.0.1",
         "open_source_license": str(open_source_license).lower(),
         "product_name": product_name,
-        "hyperparameters_tuning": hyperparameters_tuning,
-        "metric_compare_promotion": metric_compare_promotion,
-        "data_quality_checks": data_quality_checks,
-        "target_environment": target_environment,
-        "notify_on_failures": notify_on_failures,
-        "notify_on_successes": notify_on_successes,
         "zenml_server_url": zenml_server_url,
     }
     if open_source_license:
@@ -136,77 +124,6 @@ def test_custom_product_name(
         tmp_path_factory=tmp_path_factory,
         product_name="custom_product_name",
     )
-
-
-def test_no_hp_tuning(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test turning off hyperparameter tuning."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory, hyperparameters_tuning=False
-    )
-
-
-def test_latest_promotion(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test using latest promotion."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory, metric_compare_promotion=False
-    )
-
-
-def test_no_data_quality_checks(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test skipping Data Quality checks."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        data_quality_checks=False,
-    )
-
-
-def test_production_environment(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test deploying to production stage."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        target_environment="production",
-    )
-
-
-def test_no_notify_on_failure(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test skipping notification on failure."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        notify_on_failures=False,
-    )
-
-
-def test_notify_on_success(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test skipping notification on success."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        notify_on_successes=True,
-    )
-
 
 def test_custom_zenml_server_url(
     clean_zenml_client,
