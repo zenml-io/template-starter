@@ -39,10 +39,9 @@ git clone https://github.com/zenml-io/zenml.git
 cd zenml/examples/quickstart
 ```
 
-### :arrow_forward: Run Locally
 Now we're ready to start. You have two options for running the quickstart locally:
 
-#### Option 1 (*Recommended*) - Interactively explore the quickstart using Jupyter Notebook:
+#### Option 1 - Interactively explore the quickstart using Jupyter Notebook:
 ```bash
 pip install notebook
 jupyter notebook
