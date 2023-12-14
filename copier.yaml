@@ -1,11 +1,4 @@
 --- # GLOBAL PROMPT --------------------------------
-template:
-    type: str
-    help: >-
-        The project template you would like to use
-    choices:
-        ZenML Starter: starter
-    default: starter
 project_name:
     type: str
     help: Short name for your project
@@ -46,7 +39,7 @@ auto_format:
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""
-_subdirectory: "{{ template }}/template"
+_subdirectory: "./template"
 _exclude:
     - /README.md
 _tasks:

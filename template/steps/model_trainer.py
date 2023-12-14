@@ -37,8 +37,6 @@ def model_trainer(
     Raises:
         ValueError: If the model type is not supported.
     """
-
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Initialize the model with the hyperparameters indicated in the step
     # parameters and train it on the training set.
     if model_type == "sgd":
@@ -53,5 +51,4 @@ def model_trainer(
         dataset_trn.drop(columns=[target]),
         dataset_trn[target],
     )
-    ### YOUR CODE ENDS HERE ###
     return model

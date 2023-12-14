@@ -54,8 +54,6 @@ def model_evaluator(
     Returns:
         The model accuracy on the test set.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-
     # Calculate the model accuracy on the train and test set
     trn_acc = model.score(
         dataset_trn.drop(columns=[target]),
@@ -85,6 +83,4 @@ def model_evaluator(
         metadata={"train_accuracy": float(trn_acc), "test_accuracy": float(tst_acc)},
         artifact_name="model",
     )
-
-    ### YOUR CODE ENDS HERE ###
     return float(tst_acc)

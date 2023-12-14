@@ -49,11 +49,8 @@ def inference_predict(
     Returns:
         The predictions as pandas series
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # run prediction from memory
     predictions = model.predict(dataset_inf)
 
     predictions = pd.Series(predictions, name="predicted")
-    ### YOUR CODE ENDS HERE ###
-
     return predictions

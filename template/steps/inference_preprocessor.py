@@ -42,11 +42,8 @@ def inference_preprocessor(
     Returns:
         The processed dataframe: dataset_inf.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # artificially adding `target` column to avoid Pipeline issues
     dataset_inf[target] = pd.Series([1] * dataset_inf.shape[0])
     dataset_inf = preprocess_pipeline.transform(dataset_inf)
     dataset_inf.drop(columns=[target], inplace=True)
-    ### YOUR CODE ENDS HERE ###
-
     return dataset_inf

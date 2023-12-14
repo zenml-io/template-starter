@@ -25,7 +25,6 @@ def model_promoter(accuracy: float, stage: str = "production") -> bool:
     Returns:
         Whether the model was promoted or not.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     is_promoted = False
 
     if accuracy < 0.8:
@@ -59,6 +58,4 @@ def model_promoter(accuracy: float, stage: str = "production") -> bool:
             # If no such model exists, current one is promoted
             is_promoted = True
             current_model_version.set_stage(stage, force=True)
-
-    ### YOUR CODE ENDS HERE ###
     return is_promoted

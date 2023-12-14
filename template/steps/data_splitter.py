@@ -34,7 +34,6 @@ def data_splitter(
     Returns:
         The split dataset: dataset_trn, dataset_tst.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     dataset_trn, dataset_tst = train_test_split(
         dataset,
         test_size=test_size,
@@ -43,5 +42,4 @@ def data_splitter(
     )
     dataset_trn = pd.DataFrame(dataset_trn, columns=dataset.columns)
     dataset_tst = pd.DataFrame(dataset_tst, columns=dataset.columns)
-    ### YOUR CODE ENDS HERE ###
     return dataset_trn, dataset_tst

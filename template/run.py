@@ -1,4 +1,4 @@
-# {% include 'templates/license_header' %}
+# {% include 'template/license_header' %}
 
 import os
 from typing import Optional

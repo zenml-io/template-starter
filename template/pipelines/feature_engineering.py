@@ -21,6 +21,7 @@ def feature_engineering(
     normalize: Optional[bool] = None,
     drop_columns: Optional[List[str]] = None,
     target: Optional[str] = "target",
+    random_state: int = 17
 ):
     """
     Feature engineering pipeline.
@@ -34,6 +35,7 @@ def feature_engineering(
         normalize: If `True` dataset will be normalized with MinMaxScaler
         drop_columns: List of columns to drop from dataset
         target: Name of target column in dataset
+        random_state: Random state to configure the data loader
 
     Returns:
         The processed datasets (dataset_trn, dataset_tst).
@@ -41,7 +43,6 @@ def feature_engineering(
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
-    random_state = random.randint(0, 100)
     raw_data = data_loader(random_state=random_state, target=target)
     dataset_trn, dataset_tst = data_splitter(
         dataset=raw_data,

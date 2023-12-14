@@ -30,7 +30,7 @@ def data_preprocessor(
     it is suitable for model training. It takes in a dataset as an input step
     artifact and performs any necessary preprocessing steps like cleaning,
     feature engineering, feature selection, etc. It then returns the processed
-    dataset as an step output artifact.
+    dataset as a step output artifact.
 
     This step is parameterized, which allows you to configure the step
     independently of the step code, before running it in a pipeline.
@@ -52,7 +52,6 @@ def data_preprocessor(
     Returns:
         The processed datasets (dataset_trn, dataset_tst) and fitted `Pipeline` object.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # We use the sklearn pipeline to chain together multiple preprocessing steps
     preprocess_pipeline = Pipeline([("passthrough", "passthrough")])
     if drop_na:
@@ -72,6 +71,4 @@ def data_preprocessor(
         artifact_name="preprocess_pipeline",
         metadata={"random_state": random_state, "target": target},
     )
-
-    ### YOUR CODE ENDS HERE ###
     return dataset_trn, dataset_tst, preprocess_pipeline

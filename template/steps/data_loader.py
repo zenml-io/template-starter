@@ -33,7 +33,6 @@ def data_loader(
     Returns:
         The dataset artifact as Pandas DataFrame and name of target column.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     dataset = load_breast_cancer(as_frame=True)
     inference_size = int(len(dataset.target) * 0.05)
     dataset: pd.DataFrame = dataset.frame
@@ -45,5 +44,4 @@ def data_loader(
         dataset.drop(inference_subset.index, inplace=True)
     dataset.reset_index(drop=True, inplace=True)
     logger.info(f"Dataset with {len(dataset)} records loaded!")
-    ### YOUR CODE ENDS HERE ###
     return dataset
