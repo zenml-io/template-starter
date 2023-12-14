@@ -3,7 +3,7 @@
 from typing import Optional
 from uuid import UUID
 
-from steps import model_evaluator, model_trainer, model_promoter
+from steps import model_evaluator, model_promoter, model_trainer
 from zenml import ExternalArtifact, pipeline
 from zenml.logger import get_logger
 
@@ -18,21 +18,21 @@ logger = get_logger(__name__)
 def training(
     train_dataset_id: Optional[UUID] = None,
     test_dataset_id: Optional[UUID] = None,
-    min_train_accuracy: float = 0.0,
-    min_test_accuracy: float = 0.0,
+    target: Optional[str] = "target",
 ):
     """
     Model training pipeline.
 
-    This is a pipeline that loads the data, processes it and splits
-    it into train and test sets, then search for best hyperparameters,
-    trains and evaluates a model.
+    This is a pipeline that loads the data from a preprocessing pipeline,
+    trains a model on it and evaluates the model. If it is the first model
+    to be trained, it will be promoted to production. If not, it will be
+    promoted only if it has a higher accuracy than the current production
+    model version.
 
     Args:
-        test_size: Size of holdout set for training 0.0..1.0
-        drop_na: If `True` NA values will be removed from dataset
-        normalize: If `True` dataset will be normalized with MinMaxScaler
-        drop_columns: List of columns to drop from dataset
+        train_dataset_id: ID of the train dataset produced by feature engineering.
+        test_dataset_id: ID of the test dataset produced by feature engineering.
+        target: Name of target column in dataset.
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
@@ -45,16 +45,13 @@ def training(
         dataset_trn = ExternalArtifact(id=train_dataset_id)
         dataset_tst = ExternalArtifact(id=test_dataset_id)
 
-    model = model_trainer(
-        dataset_trn=dataset_trn,
-    )
+    model = model_trainer(dataset_trn=dataset_trn, target=target)
 
     acc = model_evaluator(
         model=model,
         dataset_trn=dataset_trn,
         dataset_tst=dataset_tst,
-        min_train_accuracy=min_train_accuracy,
-        min_test_accuracy=min_test_accuracy,
+        target=target,
     )
 
     model_promoter(accuracy=acc)

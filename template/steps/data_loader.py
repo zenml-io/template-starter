@@ -25,9 +25,9 @@ def data_loader(
         https://docs.zenml.io/user-guide/advanced-guide/configure-steps-pipelines
 
     Args:
+        random_state: Random state for sampling
         is_inference: If `True` subset will be returned and target column
             will be removed from dataset.
-        random_state: Random state for sampling
         target: Name of target columns in dataset.
 
     Returns:

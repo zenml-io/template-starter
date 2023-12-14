@@ -8,11 +8,13 @@ settings:
 # configuration of the Model Control Plane
 model_version:
   name: breast_cancer_classifier
+  version: sgd
   license: Apache 2.0
   description: A breast cancer classifier
   tags: ["breast_cancer", "classifier"]
 
-# pipeline configuration
-model_type: "sgd"  # Choose between rf/sgd
-# train_dataset_id: ...
-# test_dataset_id: ...
+# step configuration
+steps:
+  model_trainer:
+    parameters:
+      model_type: "sgd"  # Choose between rf/sgd

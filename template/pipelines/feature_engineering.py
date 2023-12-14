@@ -34,6 +34,9 @@ def feature_engineering(
         normalize: If `True` dataset will be normalized with MinMaxScaler
         drop_columns: List of columns to drop from dataset
         target: Name of target column in dataset
+
+    Returns:
+        The processed datasets (dataset_trn, dataset_tst).
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output

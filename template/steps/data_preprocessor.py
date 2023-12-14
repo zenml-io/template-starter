@@ -12,9 +12,9 @@ from zenml import log_artifact_metadata, step
 
 @step
 def data_preprocessor(
+    random_state: int,
     dataset_trn: pd.DataFrame,
     dataset_tst: pd.DataFrame,
-    random_state: int,
     drop_na: Optional[bool] = None,
     normalize: Optional[bool] = None,
     drop_columns: Optional[List[str]] = None,
@@ -41,12 +41,13 @@ def data_preprocessor(
         https://docs.zenml.io/user-guide/advanced-guide/configure-steps-pipelines
 
     Args:
+        random_state: Random state for sampling.
         dataset_trn: The train dataset.
         dataset_tst: The test dataset.
         drop_na: If `True` all NA rows will be dropped.
         normalize: If `True` all numeric fields will be normalized.
         drop_columns: List of column names to drop.
-        random_state: Random state for sampling.
+        target: Name of target column in dataset.
 
     Returns:
         The processed datasets (dataset_trn, dataset_tst) and fitted `Pipeline` object.

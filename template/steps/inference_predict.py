@@ -16,9 +16,10 @@
 #
 
 from typing import Any
+
 import pandas as pd
 from typing_extensions import Annotated
-from zenml import get_step_context, step
+from zenml import step
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -31,8 +32,8 @@ def inference_predict(
 ) -> Annotated[pd.Series, "predictions"]:
     """Predictions step.
 
-    This is an example of a predictions step that takes the data in and returns
-    predicted values.
+    This is an example of a predictions step that takes the data and model in
+    and returns predicted values.
 
     This step is parameterized, which allows you to configure the step
     independently of the step code, before running it in a pipeline.
@@ -42,6 +43,7 @@ def inference_predict(
         https://docs.zenml.io/user-guide/advanced-guide/configure-steps-pipelines
 
     Args:
+        model: Trained model.
         dataset_inf: The inference dataset.
 
     Returns:

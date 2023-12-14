@@ -1,8 +1,10 @@
 # {% include 'template/license_header' %}
 
+from typing import Optional
+
 import pandas as pd
 from sklearn.base import ClassifierMixin
-from zenml import step, log_artifact_metadata
+from zenml import log_artifact_metadata, step
 from zenml.logger import get_logger
 
 logger = get_logger(__name__)
@@ -15,6 +17,7 @@ def model_evaluator(
     dataset_tst: pd.DataFrame,
     min_train_accuracy: float = 0.0,
     min_test_accuracy: float = 0.0,
+    target: Optional[str] = "target",
 ) -> float:
     """Evaluate a trained model.
 
@@ -46,19 +49,12 @@ def model_evaluator(
         dataset_tst: The test dataset.
         min_train_accuracy: Minimal acceptable training accuracy value.
         min_test_accuracy: Minimal acceptable testing accuracy value.
-        fail_on_accuracy_quality_gates: If `True` a `RuntimeException` is raised
-            upon not meeting one of the minimal accuracy thresholds.
+        target: Name of target column in dataset.
 
-    Retuns:
+    Returns:
         The model accuracy on the test set.
-
-    Raises:
-        RuntimeError: if any of accuracies is lower than respective threshold
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
-    # context = get_step_context()
-    # target = context.inputs["dataset_trn"].run_metadata['target'].value
-    target = "target"
 
     # Calculate the model accuracy on the train and test set
     trn_acc = model.score(

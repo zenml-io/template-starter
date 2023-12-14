@@ -4,6 +4,7 @@ import os
 from typing import Optional
 
 import click
+import yaml
 from pipelines import (
     feature_engineering,
     inference,
@@ -102,6 +103,17 @@ def main(
         (some of which may come from command line arguments, but most
         of which comes from the YAML config files)
       * launching the pipeline
+
+    Args:
+        train_dataset_name: The name of the train dataset produced by feature engineering.
+        train_dataset_version_name: Version of the train dataset produced by feature engineering.
+            If not specified, a new version will be created.
+        test_dataset_name: The name of the test dataset produced by feature engineering.
+        test_dataset_version_name: Version of the test dataset produced by feature engineering.
+            If not specified, a new version will be created.
+        feature_pipeline: Whether to run the pipeline that creates the dataset.
+        training_pipeline: Whether to run the pipeline that trains the model.
+        inference_pipeline: Whether to run the pipeline that performs inference.
     """
     client = Client()
 
@@ -118,13 +130,10 @@ def main(
         )
         run_args_feature = {}
         feature_engineering.with_options(**pipeline_args)(**run_args_feature)
-        logger.info("Feature Engineering pipeline finished successfully!")
+        logger.info("Feature Engineering pipeline finished successfully!\n\n")
 
     # Execute Training Pipeline
     if training_pipeline:
-        pipeline_args = {}
-        pipeline_args["config_path"] = os.path.join(config_folder, "training.yaml")
-
         run_args_train = {}
 
         # If train_dataset_version_name is specified, use versioned artifacts
@@ -145,26 +154,38 @@ def main(
             run_args_train["train_dataset_id"] = train_dataset_artifact_version.id
             run_args_train["test_dataset_id"] = test_dataset_artifact_version.id
 
+        # Run the SGD pipeline
+        pipeline_args = {}
+        pipeline_args["config_path"] = os.path.join(config_folder, "training_sgd.yaml")
         training.with_options(**pipeline_args)(**run_args_train)
-        logger.info("Training pipeline finished successfully!")
+        logger.info("Training pipeline with SGD finished successfully!\n\n")
+
+        # Run the RF pipeline
+        pipeline_args = {}
+        pipeline_args["config_path"] = os.path.join(config_folder, "training_rf.yaml")
+        training.with_options(**pipeline_args)(**run_args_train)
+        logger.info("Training pipeline with RF finished successfully!\n\n")
 
     if inference_pipeline:
-        run_args_train = {}
+        run_args_inference = {}
         pipeline_args = {}
         pipeline_args["config_path"] = os.path.join(config_folder, "inference.yaml")
-        run_args_inference = {}
-        
+
         # Configure the pipeline
         inference_configured = inference.with_options(**pipeline_args)
-        
+
         # Fetch the production model
-        zenml_model = client.get_model_version("breast_cancer_classifier", "production")
+        with open(pipeline_args["config_path"], "r") as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+        zenml_model = client.get_model_version(
+            config["model_version"]["name"], config["model_version"]["version"]
+        )
         preprocess_pipeline_artifact = zenml_model.get_artifact("preprocess_pipeline")
-        
+
         # Use the metadata of feature engineering pipeline artifact
         #  to get the random state and target column
         random_state = preprocess_pipeline_artifact.run_metadata["random_state"].value
-        target = preprocess_pipeline_artifact.run_metadata['target'].value
+        target = preprocess_pipeline_artifact.run_metadata["target"].value
         run_args_inference["random_state"] = random_state
         run_args_inference["target"] = target
 
