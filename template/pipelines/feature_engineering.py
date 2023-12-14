@@ -40,7 +40,6 @@ def feature_engineering(
     Returns:
         The processed datasets (dataset_trn, dataset_tst).
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
     raw_data = data_loader(random_state=random_state, target=target)

@@ -36,7 +36,6 @@ def training(
         target: Name of target column in dataset.
         model_type: The type of model to train.
     """
-    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
     # of one step as the input of the next step.
 
