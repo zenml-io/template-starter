@@ -51,7 +51,7 @@ def model_promoter(accuracy: float, stage: str = "production") -> bool:
                 .run_metadata["test_accuracy"]
                 .value
             )
-            if accuracy > prod_accuracy:
+            if float(accuracy) > float(prod_accuracy):
                 # If current model has better metrics, we promote it
                 is_promoted = True
                 current_model_version.set_stage(stage, force=True)

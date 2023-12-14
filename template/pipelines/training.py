@@ -19,6 +19,7 @@ def training(
     train_dataset_id: Optional[UUID] = None,
     test_dataset_id: Optional[UUID] = None,
     target: Optional[str] = "target",
+    model_type: Optional[str] = "sgd",
 ):
     """
     Model training pipeline.
@@ -33,6 +34,7 @@ def training(
         train_dataset_id: ID of the train dataset produced by feature engineering.
         test_dataset_id: ID of the test dataset produced by feature engineering.
         target: Name of target column in dataset.
+        model_type: The type of model to train.
     """
     ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
     # Link all the steps together by calling them and passing the output
@@ -45,7 +47,7 @@ def training(
         dataset_trn = ExternalArtifact(id=train_dataset_id)
         dataset_tst = ExternalArtifact(id=test_dataset_id)
 
-    model = model_trainer(dataset_trn=dataset_trn, target=target)
+    model = model_trainer(dataset_trn=dataset_trn, target=target, model_type=model_type)
 
     acc = model_evaluator(
         model=model,

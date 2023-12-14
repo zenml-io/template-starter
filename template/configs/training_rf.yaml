@@ -13,8 +13,6 @@ model_version:
   description: A breast cancer classifier
   tags: ["breast_cancer", "classifier"]
 
-# step configuration
-steps:
-  model_trainer:
-    parameters:
-      model_type: "rf"  # Choose between rf/sgd
+# Configure the pipeline
+parameters:
+  model_type: "rf"  # Choose between rf/sgd

@@ -168,7 +168,7 @@ def main(
 
     if inference_pipeline:
         run_args_inference = {}
-        pipeline_args = {}
+        pipeline_args = {"enable_cache": False}
         pipeline_args["config_path"] = os.path.join(config_folder, "inference.yaml")
 
         # Configure the pipeline
