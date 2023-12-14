@@ -16,7 +16,9 @@ Along the way we will also show you how to:
 - Automatically version, track, and cache data, models, and other artifacts
 - Transition your ML models from development to production
 
-## :cloud: Run on Colab
+<img src=".assets/pipeline_overview.png" width="70%" alt="Pipelines Overview">
+
+## 🏃 Run on Colab
 
 You can use Google Colab to see ZenML in action, no signup / installation required!
 
@@ -71,21 +73,7 @@ python run.py --inference-pipeline
 
 ## :dart: Dashboard
 
-You can also take a look at our **dashboard** where you can inspect the quickstart
-pipeline run and much more. Simply execute:
 
-```shell
-# only once you've already run `zenml up`
-zenml show
-```
-
-## :sponge: Clean up
-
-To clean up, simply spin down the ZenML server.
-
-```shell
-zenml down
-```
 
 ## :bulb: Learn More
 
