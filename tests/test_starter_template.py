@@ -49,9 +49,6 @@ def generate_and_run_project(
     # generate the template in a temp path
     current_dir = os.getcwd()
     dst_path = tmp_path_factory.mktemp("pytest-template")
-    print("TEMPLATE_DIR:", TEMPLATE_DIRECTORY)
-    print("dst_path:", dst_path)
-    print("current_dir:", current_dir)
     os.chdir(str(dst_path))
     with Worker(
         src_path=TEMPLATE_DIRECTORY,
@@ -62,37 +59,39 @@ def generate_and_run_project(
     ) as worker:
         worker.run_copy()
 
-    # MLFlow Deployer not supported on Windows
-    # MLFlow `service daemon is not running` error on MacOS
-    if platform.system().lower() not in ["windows"]:
-        # run the project
-        call = [sys.executable, "run.py"]
+    # run the project
+    call = [
+        sys.executable,
+        "run.py",
+        "--training-pipeline",
+        "--feature-pipeline",
+        "--inference-pipeline",
+    ]
 
-        try:
-            subprocess.check_output(
-                call,
-                cwd=str(dst_path),
-                env=os.environ.copy(),
-                stderr=subprocess.STDOUT,
-            )
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(
-                f"Failed to run project generated with parameters: {answers}\n"
-                f"{e.output.decode()}"
-            ) from e
+    try:
+        subprocess.check_output(
+            call,
+            cwd=str(dst_path),
+            env=os.environ.copy(),
+            stderr=subprocess.STDOUT,
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"Failed to run project generated with parameters: {answers}\n"
+            f"{e.output.decode()}"
+        ) from e
 
-        # check the pipeline run is successful
-        for pipeline_suffix in ["_training", "_batch_inference"]:
-            pipeline = Client().get_pipeline(product_name + pipeline_suffix)
-            assert pipeline
-            runs = pipeline.runs
-            assert len(runs) == 1
-            assert runs[0].status == ExecutionStatus.COMPLETED
+    # check the pipeline run is successful
+    for pipeline_name in ["training", "inference", "feature_engineering"]:
+        pipeline = Client().get_pipeline(pipeline_name)
+        assert pipeline
+        runs = pipeline.runs
+        assert len(runs) == 1
+        assert runs[0].status == ExecutionStatus.COMPLETED
 
-            # clean up
-            Client().delete_pipeline(product_name + pipeline_suffix)
-        Client().delete_model(product_name)
-        Client().active_stack.model_registry.delete_model(product_name)
+        # clean up
+        Client().delete_pipeline(pipeline_name)
+    Client().delete_model("breast_cancer_classifier")
 
     os.chdir(current_dir)
     shutil.rmtree(dst_path)
@@ -121,15 +120,4 @@ def test_custom_product_name(
     generate_and_run_project(
         tmp_path_factory=tmp_path_factory,
         product_name="custom_product_name",
-    )
-
-def test_custom_zenml_server_url(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-):
-    """Test deploying to production stage."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        zenml_server_url="foo",
     )
