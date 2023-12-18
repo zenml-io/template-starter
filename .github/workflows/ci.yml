@@ -2,7 +2,25 @@ name: CI
 
 on:
   workflow_dispatch:
+    inputs:
+      ref-template:
+        description: 'Branch or tag ref to check out for template'
+        type: string
+        required: false
+      ref-zenml:
+        description: 'Branch or tag ref to check out for ZenML'
+        type: string
+        required: false
   workflow_call:
+    inputs:
+      ref-template:
+        description: 'Branch or tag ref to check out for template'
+        type: string
+        required: false
+      ref-zenml:
+        description: 'Branch or tag ref to check out for ZenML'
+        type: string
+        required: false
   push:
     branches: ["main", "develop"]
     paths-ignore: ["README.md"]
@@ -36,3 +54,5 @@ jobs:
         with:
           stack-name: ${{ matrix.stack-name }}
           python-version: ${{ matrix.python-version }}
+          ref-zenml: ${{ inputs.ref-zenml || 'feature/update-quickstart-from-template' }}
+          ref-template: ${{ inputs.ref-template || github.ref }}
