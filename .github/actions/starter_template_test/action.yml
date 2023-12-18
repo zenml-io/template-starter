@@ -69,7 +69,7 @@ runs:
     - name: Concatenate requirements
       shell: bash
       run: |
-        zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn mlflow s3 kubernetes kubeflow slack evidently
+        zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn
         cat ./local_checkout/requirements.txt ./local_checkout/test-requirements.txt ./local_checkout/integration-requirements.txt >> ./local_checkout/all-requirements.txt
 
     - name: Install requirements
