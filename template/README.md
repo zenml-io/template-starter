@@ -16,9 +16,9 @@ This is a representation of how it will all come together:
 
 Along the way we will also show you how to:
 
-- Structure your code into MLOps pipelines
-- Automatically version, track, and cache data, models, and other artifacts
-- Transition your ML models from development to production
+- Structure your code into MLOps pipelines.
+- Automatically version, track, and cache data, models, and other artifacts.
+- Transition your ML models from development to production.
 
 ## 🏃 Run on Colab
 
@@ -74,7 +74,7 @@ python run.py --inference-pipeline
 
 ## 🌵 Learning MLOps with ZenML
 
-This project is also a great source of learning about some fundamental MLOps concepts. In sum, there are four exemplary steps happening, that can be mapped onto many other projects: 
+This project is also a great source of learning about some fundamental MLOps concepts. In sum, there are four exemplary steps happening, that can be mapped onto many other projects:
 
 <details>
   <summary>🥇 Step 1: Load your data and execute feature engineering</summary>

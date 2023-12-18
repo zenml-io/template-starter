@@ -1,7 +1,7 @@
 # 📜 ZenML Project Templates
 
 This repository contains a starter template from which a simple ZenML project
-can be generated: a collection of steps, pipelines, stack configurations and
+can be generated easily. It contains a collection of steps, pipelines, stack configurations and
 other artifacts and useful resources that can get you started with ZenML.
 
 🔥 **Do you have a personal project powered by ZenML that you would like to see here?** 
