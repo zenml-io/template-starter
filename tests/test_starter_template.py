@@ -66,6 +66,7 @@ def generate_and_run_project(
         "--training-pipeline",
         "--feature-pipeline",
         "--inference-pipeline",
+        "--no-cache"
     ]
 
     try:

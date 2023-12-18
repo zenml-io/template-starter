@@ -86,6 +86,12 @@ Examples:
     default=False,
     help="Whether to run the pipeline that performs inference.",
 )
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    default=False,
+    help="Disable caching for the pipeline run.",
+)
 def main(
     train_dataset_name: str = "dataset_trn",
     train_dataset_version_name: Optional[str] = None,
@@ -94,6 +100,7 @@ def main(
     feature_pipeline: bool = False,
     training_pipeline: bool = False,
     inference_pipeline: bool = False,
+    no_cache: bool = False,
 ):
     """Main entry point for the pipeline execution.
 
@@ -114,6 +121,7 @@ def main(
         feature_pipeline: Whether to run the pipeline that creates the dataset.
         training_pipeline: Whether to run the pipeline that trains the model.
         inference_pipeline: Whether to run the pipeline that performs inference.
+        no_cache: If `True` cache will be disabled.
     """
     client = Client()
 
@@ -125,6 +133,8 @@ def main(
     # Execute Feature Engineering Pipeline
     if feature_pipeline:
         pipeline_args = {}
+        if no_cache:
+            pipeline_args["enable_cache"] = False
         pipeline_args["config_path"] = os.path.join(
             config_folder, "feature_engineering.yaml"
         )
@@ -165,12 +175,16 @@ def main(
 
         # Run the SGD pipeline
         pipeline_args = {}
+        if no_cache:
+            pipeline_args["enable_cache"] = False
         pipeline_args["config_path"] = os.path.join(config_folder, "training_sgd.yaml")
         training.with_options(**pipeline_args)(**run_args_train)
         logger.info("Training pipeline with SGD finished successfully!\n\n")
 
         # Run the RF pipeline
         pipeline_args = {}
+        if no_cache:
+            pipeline_args["enable_cache"] = False
         pipeline_args["config_path"] = os.path.join(config_folder, "training_rf.yaml")
         training.with_options(**pipeline_args)(**run_args_train)
         logger.info("Training pipeline with RF finished successfully!\n\n")
