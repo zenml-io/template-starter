@@ -114,11 +114,10 @@ We will use these versions in the next pipeline.
 <details>
   <summary>⌚ Step 2: Training pipeline</summary>
 
-Now that our data is prepared, it makes sense to train some models to get a sense of how difficult the task is. The Breast Cancer dataset is sufficiently large and complex  that it's unlikely we'll be able to train a model that behaves perfectly since the problem 
-is inherently complex, but we can get a sense of what a reasonable baseline looks like.
+Now that our data is prepared, it makes sense to train some models to get a sense of how difficult the task is. The Breast Cancer dataset is sufficiently large and complex  that it's unlikely we'll be able to train a model that behaves perfectly since the problem is inherently complex, but we can get a sense of what a reasonable baseline looks like.
 
 We'll start with two simple models, a SGD Classifier and a Random Forest
-Classifier, both batteries-included from `sklearn`. We'll train them both on the
+Classifier, both batteries-included from `sklearn`. We'll train them on the
 same data and then compare their performance.
 
 <img src=".assets/training_pipeline.png" width="50%" alt="Training pipeline">
@@ -150,7 +149,7 @@ registry. However, these topics can be explored more in the
 </details>
 
 <details>
-  <summary>💯 Step 3: Associating a model with your pipeline</summary>
+  <summary>💯 Step 3: Promoting the best model to production</summary>
 
 For now, we will use the ZenML model control plane to promote our best
 model to `production`. You can do this by simply setting the `stage` of
@@ -197,9 +196,11 @@ and served some predictions. You also learned how to iterate on your models and
 data by using some of the ZenML utility abstractions. You saw how to view your
 artifacts and stacks via the client as well as the ZenML Dashboard.
 
-If you want to learn more about ZenML as a tool, then the 
+If you want to learn more about ZenML as a tool, then the
 [:page_facing_up: **ZenML Docs**](https://docs.zenml.io/) are the perfect place 
-to get started.
+to get started. In particular, the [Production Guide](https://docs.zenml.io/user-guide/production-guide/)
+goes into more detail as to how to transition these same pipelines into production
+on the cloud.
 
 The best way to get a production ZenML instance up and running with all batteries included is the [ZenML Cloud](https://zenml.io/cloud). Check it out!
 
