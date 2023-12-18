@@ -125,11 +125,13 @@ same data and then compare their performance.
 Run it by using the ID's from the first step:
 
 ```python
+# You can also ignore the `--train-dataset-version-name` and `--test-dataset-version-name` to use 
+#  the latest versions
 python run.py --training-pipeline --train-dataset-version-name 1 --test-dataset-version-name 1
 ```
 
-ZenML offers a *Model Control Plane*,
-which is a central register of all your ML models. Each run of the training pipeline will produce a ZenML Model Version.
+To track these models, ZenML offers a *Model Control Plane*, which is a central register of all your ML models.
+Each run of the training pipeline will produce a ZenML Model Version.
 
 ```shell
 zenml model list
@@ -159,7 +161,7 @@ your chosen model version to the `production` tag.
 zenml model version update breast_cancer_classifier rf --stage production
 ```
 
-Even if we did this manually for illustration, if you inspect the [promoter code](steps/model_promoter.py), we can see this would already have been done automatically by the training pipeline. It uses the previous production metrics to compare to the current one, and promotes the new model if it performs better on the test set.
+While we've demonstrated a manual promotion process for clarity, a more in-depth look at the [promoter code](steps/model_promoter.py) reveals that the training pipeline is designed to automate this step. It evaluates the latest model against established production metrics and, if the new model outperforms the existing one based on test set results, it will automatically promote the model to production. Here is an overview of the process:
 
 <img src=".assets/cloud_mcp.png" width="60%" alt="Model Control Plane">
 
