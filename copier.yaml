@@ -32,10 +32,6 @@ email:
         The email of the person/entity holding the copyright
     default: info@zenml.io
     when: "{{ open_source_license }}"
-auto_format:
-    type: bool
-    help: "Auto-format the generated code with black, ruff and autoflake? \n   (NOTE: you need to have these tools installed in your environment)"
-    default: false
 
 # CONFIGURATION -------------------------
 _templates_suffix: ""
