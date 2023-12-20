@@ -11,51 +11,40 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #  or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
+
+
+import os
+import pathlib
+import platform
 import shutil
 import subprocess
 import sys
 from typing import Optional
-from copier import Worker
-import os
-import pathlib
+
 import pytest
-
-from zenml.enums import ExecutionStatus
-from zenml.post_execution import get_pipeline
+from copier import Worker
 from zenml.client import Client
+from zenml.enums import ExecutionStatus
 
-TEMPLATE_DIRECTORY = str(pathlib.Path(__file__).parent.parent)
+TEMPLATE_DIRECTORY = str(pathlib.Path.joinpath(pathlib.Path(__file__).parent.parent))
 
 
 def generate_and_run_project(
     tmp_path_factory: pytest.TempPathFactory,
     open_source_license: Optional[str] = "apache",
-    auto_format: bool = True,
-    use_step_params: bool = True,
-    use_custom_artifacts: bool = True,
-    configurable_dataset: bool = True,
-    configurable_model: bool = True,
-    sklearn_dataset_name: str = "wine",
-    sklearn_model_name: str = "SVC",
-    pipeline_name: str = "model_training_pipeline",
+    product_name: str = "starter_project",
 ):
     """Generate and run the starter project with different options."""
 
     answers = {
-        "template": "starter",
-        "project_name": "Pytest Starter",
+        "project_name": "Pytest Templated Project",
         "version": "0.0.1",
         "open_source_license": str(open_source_license).lower(),
-        "email": "pytest@zenml.io",
-        "full_name": "Pytest",
-        "auto_format": auto_format,
-        "use_custom_artifacts": use_custom_artifacts,
-        "use_step_params": use_step_params,
-        "configurable_dataset": configurable_dataset,
-        "configurable_model": configurable_model,
-        "sklearn_dataset_name": sklearn_dataset_name,
-        "sklearn_model_name": sklearn_model_name,
+        "product_name": product_name,
     }
+    if open_source_license:
+        answers["email"] = "pytest@zenml.io"
+        answers["full_name"] = "Pytest"
 
     # generate the template in a temp path
     current_dir = os.getcwd()
@@ -66,38 +55,50 @@ def generate_and_run_project(
         dst_path=str(dst_path),
         data=answers,
         unsafe=True,
+        vcs_ref="HEAD",
     ) as worker:
         worker.run_copy()
 
     # run the project
-    call = [sys.executable, "run.py"]
+    call = [
+        sys.executable,
+        "run.py",
+        "--training-pipeline",
+        "--feature-pipeline",
+        "--inference-pipeline",
+        "--no-cache"
+    ]
 
     try:
-        subprocess.check_call(
+        subprocess.check_output(
             call,
             cwd=str(dst_path),
             env=os.environ.copy(),
+            stderr=subprocess.STDOUT,
         )
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         raise RuntimeError(
-            f"Failed to run project generated with parameters: {answers}"
+            f"Failed to run project generated with parameters: {answers}\n"
+            f"{e.output.decode()}"
         ) from e
 
     # check the pipeline run is successful
-    pipeline = get_pipeline(pipeline_name)
-    assert pipeline
-    runs = pipeline.runs
-    assert len(runs) == 1
-    assert runs[0].status == ExecutionStatus.COMPLETED
+    for pipeline_name in ["training", "inference", "feature_engineering"]:
+        pipeline = Client().get_pipeline(pipeline_name)
+        assert pipeline
+        runs = pipeline.runs
+        assert len(runs) == 1
+        assert runs[0].status == ExecutionStatus.COMPLETED
 
-    # clean up
-    Client().delete_pipeline(pipeline_name)
+        # clean up
+        Client().delete_pipeline(pipeline_name)
+    Client().delete_model("breast_cancer_classifier")
 
     os.chdir(current_dir)
     shutil.rmtree(dst_path)
 
 
-@pytest.mark.parametrize("open_source_license", ["mit", None])
+@pytest.mark.parametrize("open_source_license", ["mit", None], ids=["oss", "css"])
 def test_generate_license(
     clean_zenml_client,
     tmp_path_factory: pytest.TempPathFactory,
@@ -111,75 +112,13 @@ def test_generate_license(
     )
 
 
-def test_no_auto_format(
+def test_custom_product_name(
     clean_zenml_client,
     tmp_path_factory: pytest.TempPathFactory,
 ):
-    """Test turning off code auto-format."""
+    """Test using custom pipeline name."""
 
     generate_and_run_project(
         tmp_path_factory=tmp_path_factory,
-        auto_format=False,
-    )
-
-
-@pytest.mark.parametrize("use_custom_artifacts", [True, False])
-@pytest.mark.parametrize("sklearn_dataset_name", ["wine", "iris"])
-@pytest.mark.parametrize(
-    "sklearn_model_name",
-    [
-        "SGDClassifier",
-        "DecisionTreeClassifier",
-    ],
-)
-def test_step_params_disabled(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-    use_custom_artifacts: bool,
-    sklearn_dataset_name: str,
-    sklearn_model_name: str,
-):
-    """Test generating the starter template with step parameters disabled ."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        use_step_params=False,
-        use_custom_artifacts=use_custom_artifacts,
-        configurable_dataset=False,
-        configurable_model=False,
-        sklearn_dataset_name=sklearn_dataset_name,
-        sklearn_model_name=sklearn_model_name,
-    )
-
-
-@pytest.mark.parametrize("use_custom_artifacts", [True, False])
-@pytest.mark.parametrize("configurable_dataset", [True, False])
-@pytest.mark.parametrize("configurable_model", [True, False])
-@pytest.mark.parametrize("sklearn_dataset_name", ["iris", "breast_cancer"])
-@pytest.mark.parametrize(
-    "sklearn_model_name",
-    [
-        "RandomForestClassifier",
-        "KNeighborsClassifier",
-    ],
-)
-def test_step_params_enabled(
-    clean_zenml_client,
-    tmp_path_factory: pytest.TempPathFactory,
-    use_custom_artifacts: bool,
-    configurable_dataset: bool,
-    configurable_model: bool,
-    sklearn_dataset_name: str,
-    sklearn_model_name: str,
-):
-    """Test generating the starter template with step parameters enabled ."""
-
-    generate_and_run_project(
-        tmp_path_factory=tmp_path_factory,
-        use_step_params=False,
-        use_custom_artifacts=use_custom_artifacts,
-        configurable_dataset=configurable_dataset,
-        configurable_model=configurable_model,
-        sklearn_dataset_name=sklearn_dataset_name,
-        sklearn_model_name=sklearn_model_name,
+        product_name="custom_product_name",
     )

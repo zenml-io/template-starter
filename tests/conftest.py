@@ -31,10 +31,6 @@ def configure_stack():
     if stack_name == "local":
         components = {}
         for component in [
-            ("mlflow_local", "mlflow", StackComponentType.EXPERIMENT_TRACKER),
-            ("mlflow_local", "mlflow", StackComponentType.MODEL_REGISTRY),
-            ("mlflow_local", "mlflow", StackComponentType.MODEL_DEPLOYER),
-            ("evidently", "evidently", StackComponentType.DATA_VALIDATOR),
             ("local", "local", StackComponentType.ORCHESTRATOR),
             ("local", "local", StackComponentType.ARTIFACT_STORE),
         ]:
