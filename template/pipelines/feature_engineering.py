@@ -1,6 +1,5 @@
 # {% include 'template/license_header' %}
 
-import random
 from typing import List, Optional
 
 from steps import (
@@ -21,7 +20,7 @@ def feature_engineering(
     normalize: Optional[bool] = None,
     drop_columns: Optional[List[str]] = None,
     target: Optional[str] = "target",
-    random_state: int = 17
+    random_state: int = 17,
 ):
     """
     Feature engineering pipeline.

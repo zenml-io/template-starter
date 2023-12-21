@@ -18,7 +18,9 @@ def model_trainer(
     dataset_trn: pd.DataFrame,
     model_type: str = "sgd",
     target: Optional[str] = "target",
-) -> Annotated[ClassifierMixin, ArtifactConfig(name="model", is_model_artifact=True)]:
+) -> Annotated[
+    ClassifierMixin, ArtifactConfig(name="sklearn_classifier", is_model_artifact=True)
+]:
     """Configure and train a model on the training dataset.
 
     This is an example of a model training step that takes in a dataset artifact
