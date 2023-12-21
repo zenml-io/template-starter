@@ -36,8 +36,6 @@ email:
 # CONFIGURATION -------------------------
 _templates_suffix: ""
 _subdirectory: "./template"
-_exclude:
-    - /README.md
 _tasks:
     # Remove unused imports and variables
     - >-
