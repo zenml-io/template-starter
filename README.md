@@ -1,4 +1,4 @@
-# 📜 ZenML Project Templates
+# 📜 ZenML Starter Template
 
 This repository contains a starter template from which a simple ZenML project
 can be generated easily. It contains a collection of steps, pipelines, stack configurations and
