@@ -55,5 +55,5 @@ jobs:
         with:
           stack-name: ${{ matrix.stack-name }}
           python-version: ${{ matrix.python-version }}
-          ref-zenml: ${{ inputs.ref-zenml || 'feature/OSSK-342-rename-model-version-to-a-model' }}
+          ref-zenml: ${{ inputs.ref-zenml || 'feature/OSSK-357-deprecate-external-artifact-with-non-value-inputs' }}
           ref-template: ${{ inputs.ref-template || github.ref }}
