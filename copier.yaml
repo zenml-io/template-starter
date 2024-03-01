@@ -42,7 +42,7 @@ _tasks:
       {% if _copier_conf.os == 'windows' %}
       echo "Auto-formatting not supported on Windows"
       {% else  %}
-      {{ _copier_python }} -m ruff --select F401,F841 --fix \
+      {{ _copier_python }} -m ruff check --select F401,F841 --fix \
           --exclude "__init__.py" --isolated \
           steps pipelines run.py > /dev/null 2>&1 || true
       {% endif %}
@@ -51,7 +51,7 @@ _tasks:
       {% if _copier_conf.os == 'windows' %}
       echo "Auto-formatting not supported on Windows"
       {% else  %}
-      {{ _copier_python }} -m ruff --select I \
+      {{ _copier_python }} -m ruff check --select I \
           --fix --ignore D \
           steps pipelines run.py > /dev/null 2>&1 || true
       {% endif %}
