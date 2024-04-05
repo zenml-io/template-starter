@@ -23,63 +23,63 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check out repository code
-      uses: actions/checkout@v3
-      with:
-        repository: zenml-io/zenml-project-templates
-        ref: ${{ inputs.ref-template }}
-        path: ./local_checkout
+  - name: Check out repository code
+    uses: actions/checkout@v3
+    with:
+      repository: zenml-io/zenml-project-templates
+      ref: ${{ inputs.ref-template }}
+      path: ./local_checkout
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ inputs.python-version }}
-    
-    - name: Configure git (non-Windows)
-      if: ${{ runner.os != 'Windows' }}
-      shell: bash
-      run: |
-        git config --global user.email "info@zenml.io"
-        git config --global user.name "ZenML GmbH"
-    
-    - name: Configure git (Windows)
-      if: ${{ runner.os == 'Windows' }}
-      shell: bash
-      run: |
-        "C:\Program Files\Git\bin\git.exe" config --global user.email "info@zenml.io"
-        "C:\Program Files\Git\bin\git.exe" config --global user.name "ZenML GmbH"
+  - name: Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: ${{ inputs.python-version }}
 
-    - name: Install  wheel
-      shell: bash
-      run: |
-        pip install wheel
-    
-    - name: Install ZenML
-      if: ${{ inputs.ref-zenml != '' }}
-      shell: bash
-      run: |
-        pip install "git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}" "zenml[server]@git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}"
-    
-    - name: Install ZenML
-      if: ${{ inputs.ref-zenml == '' }}
-      shell: bash
-      run: |
-        pip install zenml "zenml[server]"
-    
-    - name: Concatenate requirements
-      shell: bash
-      run: |
-        zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn
-        cat ./local_checkout/requirements.txt ./local_checkout/test-requirements.txt ./local_checkout/integration-requirements.txt >> ./local_checkout/all-requirements.txt
+  - name: Configure git (non-Windows)
+    if: ${{ runner.os != 'Windows' }}
+    shell: bash
+    run: |
+      git config --global user.email "info@zenml.io"
+      git config --global user.name "ZenML GmbH"
 
-    - name: Install requirements
-      shell: bash
-      run: |
-        pip install -r ./local_checkout/all-requirements.txt
+  - name: Configure git (Windows)
+    if: ${{ runner.os == 'Windows' }}
+    shell: bash
+    run: |
+      "C:\Program Files\Git\bin\git.exe" config --global user.email "info@zenml.io"
+      "C:\Program Files\Git\bin\git.exe" config --global user.name "ZenML GmbH"
 
-    - name: Run pytests
-      shell: bash
-      env:
-        ZENML_STACK_NAME: ${{ inputs.stack-name }}
-      run: |
-        pytest ./local_checkout/tests
+  - name: Install  wheel
+    shell: bash
+    run: |
+      pip install wheel uv
+
+  - name: Install ZenML
+    if: ${{ inputs.ref-zenml != '' }}
+    shell: bash
+    run: |
+      uv pip install --system "git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}" "zenml[server]@git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}"
+
+  - name: Install ZenML
+    if: ${{ inputs.ref-zenml == '' }}
+    shell: bash
+    run: |
+      uv pip install --system zenml "zenml[server]"
+
+  - name: Concatenate requirements
+    shell: bash
+    run: |
+      zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn
+      cat ./local_checkout/requirements.txt ./local_checkout/test-requirements.txt ./local_checkout/integration-requirements.txt >> ./local_checkout/all-requirements.txt
+
+  - name: Install requirements
+    shell: bash
+    run: |
+      uv pip install --system -r ./local_checkout/all-requirements.txt
+
+  - name: Run pytests
+    shell: bash
+    env:
+      ZENML_STACK_NAME: ${{ inputs.stack-name }}
+    run: |
+      pytest ./local_checkout/tests

@@ -3,3 +3,4 @@ copier
 jinja2-time
 zenml[server]>=0.52.0
 notebook
+pyyaml-include<2.0
