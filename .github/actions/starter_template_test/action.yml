@@ -52,19 +52,19 @@ runs:
     - name: Install  wheel
       shell: bash
       run: |
-        pip install wheel
+        pip install wheel uv
     
     - name: Install ZenML
       if: ${{ inputs.ref-zenml != '' }}
       shell: bash
       run: |
-        pip install "git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}" "zenml[server]@git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}"
+        uv pip install --system "git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}" "zenml[server]@git+https://github.com/zenml-io/zenml.git@${{ inputs.ref-zenml }}"
     
     - name: Install ZenML
       if: ${{ inputs.ref-zenml == '' }}
       shell: bash
       run: |
-        pip install zenml "zenml[server]"
+        uv pip install --system zenml "zenml[server]"
     
     - name: Concatenate requirements
       shell: bash
@@ -75,7 +75,7 @@ runs:
     - name: Install requirements
       shell: bash
       run: |
-        pip install -r ./local_checkout/all-requirements.txt
+        uv pip install --system -r ./local_checkout/all-requirements.txt
 
     - name: Run pytests
       shell: bash
