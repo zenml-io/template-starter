@@ -36,6 +36,9 @@ email:
 # CONFIGURATION -------------------------
 _templates_suffix: ""
 _subdirectory: "./template"
+_exclude:
+    - license
+    - license_header
 _tasks:
     # Remove unused imports and variables
     - >-
