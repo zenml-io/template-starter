@@ -66,7 +66,7 @@ def generate_and_run_project(
         "--training-pipeline",
         "--feature-pipeline",
         "--inference-pipeline",
-        "--no-cache"
+        "--no-cache",
     ]
 
     try:
@@ -83,11 +83,15 @@ def generate_and_run_project(
         ) from e
 
     # check the pipeline run is successful
-    for pipeline_name in ["training", "inference", "feature_engineering"]:
+    for pipeline_name, run_count in [
+        ("training", 2),
+        ("inference", 1),
+        ("feature_engineering", 1),
+    ]:
         pipeline = Client().get_pipeline(pipeline_name)
         assert pipeline
         runs = pipeline.runs
-        assert len(runs) == 1
+        assert len(runs) == run_count
         assert runs[0].status == ExecutionStatus.COMPLETED
 
         # clean up
