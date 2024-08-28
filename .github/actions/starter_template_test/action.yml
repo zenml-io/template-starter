@@ -69,7 +69,7 @@ runs:
   - name: Concatenate requirements
     shell: bash
     run: |
-      zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn
+      zenml integration export-requirements -o ./local_checkout/integration-requirements.txt sklearn pandas
       cat ./local_checkout/requirements.txt ./local_checkout/test-requirements.txt ./local_checkout/integration-requirements.txt >> ./local_checkout/all-requirements.txt
 
   - name: Install requirements
