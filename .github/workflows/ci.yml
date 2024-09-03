@@ -41,7 +41,7 @@ jobs:
       matrix:
         stack-name: [local]
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     env:
       ZENML_DEBUG: true
       ZENML_ANALYTICS_OPT_IN: false
@@ -55,5 +55,5 @@ jobs:
         with:
           stack-name: ${{ matrix.stack-name }}
           python-version: ${{ matrix.python-version }}
-          ref-zenml: ${{ inputs.ref-zenml || 'develop' }}
+          ref-zenml: ${{ inputs.ref-zenml || 'feature/PRD-566-dependency-cleanup' }}
           ref-template: ${{ inputs.ref-template || github.ref }}
