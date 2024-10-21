@@ -207,8 +207,8 @@ def main(
 
         # Use the metadata of feature engineering pipeline artifact
         #  to get the random state and target column
-        random_state = preprocess_pipeline_artifact.run_metadata["random_state"].value
-        target = preprocess_pipeline_artifact.run_metadata["target"].value
+        random_state = preprocess_pipeline_artifact.run_metadata["random_state"]
+        target = preprocess_pipeline_artifact.run_metadata["target"]
         run_args_inference["random_state"] = random_state
         run_args_inference["target"] = target
 
