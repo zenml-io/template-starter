@@ -74,7 +74,7 @@ _tasks:
       echo "    pip install -r requirements.txt"
       echo "    # Start the ZenML UI (optional; you'll also need the zenml[server] Python"
       echo "    # package installed"
-      echo "    zenml up"
+      echo "    zenml login --local"
       echo "    python run.py"
       echo "Next, you should take a look at the '{{ _copier_conf.dst_path }}/README.md' file in the generated project."
       echo "Happy coding!"
