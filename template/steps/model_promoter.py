@@ -48,7 +48,6 @@ def model_promoter(accuracy: float, stage: str = "production") -> bool:
             prod_accuracy = (
                 stage_model.get_artifact("sklearn_classifier")
                 .run_metadata["test_accuracy"]
-                .value
             )
             if float(accuracy) > float(prod_accuracy):
                 # If current model has better metrics, we promote it
