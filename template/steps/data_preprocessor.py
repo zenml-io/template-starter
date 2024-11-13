@@ -68,7 +68,7 @@ def data_preprocessor(
 
     # Log metadata so we can load it in the inference pipeline
     log_metadata(
-        artifact_name="preprocess_pipeline",
         metadata={"random_state": random_state, "target": target},
+        artifact_name="preprocess_pipeline",
     )
     return dataset_trn, dataset_tst, preprocess_pipeline
