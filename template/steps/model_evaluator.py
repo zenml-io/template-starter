@@ -82,5 +82,6 @@ def model_evaluator(
     log_metadata(
         metadata={"train_accuracy": float(trn_acc), "test_accuracy": float(tst_acc)},
         artifact_name="sklearn_classifier",
+        infer_artifact=True,
     )
     return float(tst_acc)
