@@ -7,7 +7,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from typing_extensions import Annotated
 from utils.preprocess import ColumnsDropper, DataFrameCaster, NADropper
-from zenml import log_artifact_metadata, step
+from zenml import log_metadata, step
 
 
 @step
@@ -67,8 +67,9 @@ def data_preprocessor(
     dataset_tst = preprocess_pipeline.transform(dataset_tst)
 
     # Log metadata so we can load it in the inference pipeline
-    log_artifact_metadata(
-        artifact_name="preprocess_pipeline",
+    log_metadata(
         metadata={"random_state": random_state, "target": target},
+        artifact_name="preprocess_pipeline",
+        infer_artifact=True,
     )
     return dataset_trn, dataset_tst, preprocess_pipeline
