@@ -6,6 +6,8 @@ settings:
       - pandas
     requirements:
       - pyarrow
+    apt_packages:
+      - g++
 
 # configuration of the Model Control Plane
 model:
