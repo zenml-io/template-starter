@@ -6,6 +6,8 @@ settings:
       - pandas
     requirements:
       - pyarrow
+    apt_packages:
+      - g++
 
 # pipeline configuration
 test_size: 0.35
